@@ -48,3 +48,10 @@ test("Creates a new gameboard", () => {
 		"J1","J2","J3","J4","J5","J6","J7","J8","J9","J10"
 	]);
 });
+
+// Checks if a position is valid
+test("Checks if a position is valid", () => {
+	let board = new Gameboard();
+	board.newBoard();
+	expect(board.placeShip(5, "A1", "B1")).toBe(false);
+})
