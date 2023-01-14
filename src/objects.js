@@ -1,12 +1,12 @@
 class Ship {
 	constructor(length) {
 		this.length = length,
-		this.hits = 0,
-		this.sunk = false,
-
-		this.hit = function (num) {
-			this.hits = this.hits + num;
-		};
+			this.hits = 0,
+			this.sunk = false,
+			this.position = [],
+			this.hit = function (num) {
+				this.hits = this.hits + num;
+			};
 		this.isSunk = function () {
 			if (this.hits >= length) {
 				this.sunk = true;
@@ -21,6 +21,8 @@ class Gameboard {
 
 		const columns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
 
+		let misses = [];
+
 		this.newBoard = function () {
 			columns.forEach(column => {
 				for (let i = 1; i < 11; i++) {
@@ -30,7 +32,6 @@ class Gameboard {
 		};
 
 		this.placeShip = function (ship, xPos, yPos) {
-			const vessel = new Ship(ship);
 			let firstNum = xPos.slice(1, 3);
 			let secondNum = yPos.slice(1, 3);
 			let firstLetter = xPos.slice(0, 1);
@@ -40,13 +41,13 @@ class Gameboard {
 			let board = this.board;
 
 			function letterPositions(firstLetter, firstNum) {
-				if (result.length === vessel.length) return;
+				if (result.length === ship.length) return;
 				result.push(firstLetter + firstNum);
 				letterPositions(firstLetter, firstNum + 1);
 			};
 
 			function numberPositions(letter, firstNum) {
-				if (result.length === vessel.length) return;
+				if (result.length === ship.length) return;
 				result.push(columns[letter] += firstNum);
 				numberPositions(letter + 1, firstNum);
 			};
@@ -58,26 +59,35 @@ class Gameboard {
 				});
 			};
 
-			if ((firstNum - secondNum) === -vessel.length + 1 || ((columns.indexOf(secondLetter) + 1) - columns.indexOf(firstLetter)) === vessel.length) {
+			if ((firstNum - secondNum) === -ship.length + 1 || ((columns.indexOf(secondLetter) + 1) - columns.indexOf(firstLetter)) === ship.length) {
 				if (firstLetter === secondLetter) {
 					result.length = 0;
-					letterPositions(firstLetter, firstNum);
+					letterPositions(firstLetter, Number(firstNum));
+					ship.position = result;
 					removeSpaces();
-				}
-				else if (firstNum === secondNum) {
+				} else if (firstNum === secondNum) {
 					let letter = columns.indexOf(firstLetter);
 					result.length = 0;
 					numberPositions(letter, firstNum);
+					ship.position = result;
 					removeSpaces();
-				}
-				else {
+				} else {
 					console.log("Invalid position");
 				}
-			}
-			else {
+			} else {
 				console.log("The spaces you selected do not match your ship's size.")
 			};
 		};
+
+		this.receiveAttack = function (coordinates) {
+			console.log(misses);
+			if (ship.position.includes(coordinates)) {
+				ship.hit(1);
+				ship.isSunk();
+			} else {
+				misses.push(coordinates);
+			}
+		}
 	};
 };
 

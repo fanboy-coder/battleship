@@ -49,11 +49,12 @@ test("Creates a new gameboard", () => {
 	]);
 });
 
-// Checks if a position is valid
+// Checks if a ship can be placed horizontally
 test("Checks if an horizontal position is valid", () => {
 	let board = new Gameboard();
 	board.newBoard();
-	board.placeShip(5, "B2", "F2");
+	let vessel = new Ship(5);
+	board.placeShip(vessel, "B2", "F2");
 	expect(board.board).toMatchObject([
 		"A1","A2","A3","A4","A5","A6","A7","A8","A9","A10",
 		"B1","B3","B4","B5","B6","B7","B8","B9","B10",
@@ -68,10 +69,12 @@ test("Checks if an horizontal position is valid", () => {
 	]);
 });
 
+// Checks if a ship can be placed vertically
 test("Checks if a vertical position is valid", () => {
 	let board = new Gameboard();
 	board.newBoard();
-	board.placeShip(5, "A2", "A6");
+	let vessel = new Ship(5);
+	board.placeShip(vessel, "A2", "A6");
 	expect(board.board).toMatchObject([
 		"A1","A7","A8","A9","A10",
 		"B1","B2","B3","B4","B5","B6","B7","B8","B9","B10",
@@ -84,4 +87,23 @@ test("Checks if a vertical position is valid", () => {
 		"I1","I2","I3","I4","I5","I6","I7","I8","I9","I10",
 		"J1","J2","J3","J4","J5","J6","J7","J8","J9","J10"
 	]);
-})
+});
+
+//Checks the ship's positions after placing it on the board
+test("Check the ship's position after placing on the board", () => {
+	let board = new Gameboard();
+	board.newBoard();
+	let vessel = new Ship(5);
+	board.placeShip(vessel, "A2", "A6");
+	expect(vessel.position).toMatchObject(["A2","A3","A4","A5","A6"]);
+});
+
+//Registers a missed hit
+test("Checks if a missed hit is registered", () => {
+	let board = new Gameboard();
+	board.newBoard();
+	let vessel = new Ship(5);
+	board.placeShip(vessel, "A2", "A6");
+	board.receiveAttack("A1");
+	expect(misses).toMatchObject(["A1"]);
+});
