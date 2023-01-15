@@ -98,6 +98,16 @@ test("Check the ship's position after placing on the board", () => {
 	expect(vessel.position).toMatchObject(["A2","A3","A4","A5","A6"]);
 });
 
+//Registers a hit
+test("Checks if a boat was hit", () => {
+	let board = new Gameboard();
+	board.newBoard();
+	let vessel = new Ship(5);
+	board.placeShip(vessel, "A2", "A6");
+	board.receiveAttack("A2");
+	expect(vessel).toMatchObject({"length":5, "hits":1, "sunk": false});
+})
+
 //Registers a missed hit
 test("Checks if a missed hit is registered", () => {
 	let board = new Gameboard();
@@ -105,5 +115,5 @@ test("Checks if a missed hit is registered", () => {
 	let vessel = new Ship(5);
 	board.placeShip(vessel, "A2", "A6");
 	board.receiveAttack("A1");
-	expect(misses).toMatchObject(["A1"]);
+	expect(board.misses).toMatchObject(["A1"]);
 });

@@ -1,3 +1,5 @@
+let dock = [];
+
 class Ship {
 	constructor(length) {
 		this.length = length,
@@ -18,10 +20,8 @@ class Ship {
 class Gameboard {
 	constructor() {
 		this.board = [];
-
+		this.misses = [];
 		const columns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
-
-		let misses = [];
 
 		this.newBoard = function () {
 			columns.forEach(column => {
@@ -64,6 +64,7 @@ class Gameboard {
 					result.length = 0;
 					letterPositions(firstLetter, Number(firstNum));
 					ship.position = result;
+					dock.push(ship);
 					removeSpaces();
 				} else if (firstNum === secondNum) {
 					let letter = columns.indexOf(firstLetter);
@@ -80,14 +81,17 @@ class Gameboard {
 		};
 
 		this.receiveAttack = function (coordinates) {
-			console.log(misses);
-			if (ship.position.includes(coordinates)) {
-				ship.hit(1);
-				ship.isSunk();
-			} else {
-				misses.push(coordinates);
-			}
-		}
+			for (let i=0; i<dock.length; i++) {
+				if(!dock[i].position.includes(coordinates)) {
+					this.misses.push(coordinates);
+					break;
+				}
+				else if (dock.find(test => test.position = coordinates)) {
+						dock[i].hit(1);
+						dock[i].isSunk();
+				};
+			};
+		};
 	};
 };
 
