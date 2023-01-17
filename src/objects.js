@@ -81,19 +81,44 @@ class Gameboard {
 		};
 
 		this.receiveAttack = function (coordinates) {
-			for (let i=0; i<dock.length; i++) {
-				if(!dock[i].position.includes(coordinates)) {
+			for (let i = 0; i < dock.length; i++) {
+				if (!dock[i].position.includes(coordinates)) {
 					this.misses.push(coordinates);
 					break;
 				}
 				else if (dock.find(test => test.position = coordinates)) {
-						dock[i].hit(1);
-						dock[i].isSunk();
+					dock[i].hit(1);
+					dock[i].isSunk();
 				};
 			};
 		};
+
+		this.gameOver = function () {
+			const check = dock.every(ship => ship.sunk = false);
+			if (!check) {
+				console.log("Game Over");
+			};
+		};
+
 	};
 };
 
+class Player {
+	constructor(name) {
+		this.name = name,
+			this.plays = [],
 
-module.exports = { Ship, Gameboard };
+			this.randomPlay = function (board) {
+				let play = board.board[Math.floor(Math.random() * board.board.length)];
+				if(!this.plays.includes(play)){
+					board.receiveAttack(play);
+					this.plays.push(play);
+				}
+				else {
+					this.randomPlay(board);
+				};
+			};
+	};
+};
+
+module.exports = { Ship, Gameboard, Player };

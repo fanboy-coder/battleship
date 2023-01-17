@@ -1,4 +1,4 @@
-const {Ship, Gameboard} = require("./objects");
+const {Ship, Gameboard, Player} = require("./objects");
 
 //Ship factory tests
 
@@ -116,4 +116,34 @@ test("Checks if a missed hit is registered", () => {
 	board.placeShip(vessel, "A2", "A6");
 	board.receiveAttack("A1");
 	expect(board.misses).toMatchObject(["A1"]);
+});
+
+//Registers multiple missed hits
+test("Checks if multiple missed hits are registered", () => {
+	let board = new Gameboard();
+	board.newBoard();
+	let vessel = new Ship(5);
+	board.placeShip(vessel, "A2", "A6");
+	board.receiveAttack("A1");
+	let vessel2 = new Ship(3);
+	board.placeShip(vessel2, "B3", "B5");
+	board.receiveAttack("E1");
+	expect(board.misses).toMatchObject(["A1","E1"]);
+});
+
+//Logs a Game Over message if the game ends
+test("Logs a Game Over message if all ships are sunk", () => {
+	let board = new Gameboard();
+	board.newBoard();
+	let vessel = new Ship(3);
+	board.placeShip(vessel, "A2", "A4");
+	board.receiveAttack("A2");
+	board.receiveAttack("A3");
+	board.receiveAttack("A4");
+	const logSpy = jest.spyOn(global.console, 'log');
+	board.gameOver();
+	expect(logSpy).toHaveBeenCalled();
+    expect(logSpy).toHaveBeenCalledTimes(1);
+    expect(logSpy).toHaveBeenCalledWith("Game Over");
+    logSpy.mockRestore();
 });
