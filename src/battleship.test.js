@@ -1,4 +1,5 @@
 const {Ship, Gameboard, Player} = require("./objects");
+// const { newGame } = require("./index");
 
 //Ship factory tests
 
@@ -8,27 +9,41 @@ test("Creates a Carrier ship", () => {
 	expect(carrier).toMatchObject({"length":5, "hits":0, "sunk": false});
 });
 
-//Checks if a Carrier ship takes proper number of hits
-test("Makes a Submarine take 2 hits", () => {
-	let submarine = new Ship(3);
-	submarine.hit(2);
-	expect(submarine).toMatchObject({"length":3, "hits":2, "sunk": false});
-});
+//Registers a hit
+test("Checks if a boat was hit", () => {
+	let board = new Gameboard();
+	board.newBoard();
+	let vessel = new Ship(5);
+	let player1 = new Player("Player 1");
+	board.placeShip(player1.dock, vessel, "A1", "A5");
+	board.receiveAttack(player1.dock, "A1");
+	expect(vessel).toMatchObject({"length":5, "hits":1, "sunk": false});
+})
 
-//Checks if a ship sinks after taking enough hits
-test("Sinks a Carrier ship that takes 5 hits", () => {
-	let carrier = new Ship(5);
-	carrier.hit(5);
-	carrier.isSunk();
-	expect(carrier).toMatchObject({"length":5, "hits":5, "sunk": true});
+//Registers a missed hit
+test("Checks if a missed hit is registered", () => {
+	let board = new Gameboard();
+	board.newBoard();
+	let vessel = new Ship(5);
+	let player1 = new Player("Player 1");
+	board.placeShip(player1.dock, vessel, "A2", "A6");
+	board.receiveAttack(player1.dock,"A1");
+	expect(board.misses).toMatchObject(["A1"]);
 });
 
 //Checks if a ship sinks after taking more hits than necessary
-test("Sinks a Carrier ship that takes 6 hits", () => {
-	let carrier = new Ship(5);
-	carrier.hit(6);
-	carrier.isSunk();
-	expect(carrier).toMatchObject({"length":5, "hits":6, "sunk": true});
+test("Sinks a Carrier ship that has taken 5 hits", () => {
+	let vessel = new Ship(5);
+	let board = new Gameboard();
+	board.newBoard();
+	let player1 = new Player("Player 1");
+	board.placeShip(player1.dock,vessel, "A1", "A5");
+	board.receiveAttack(player1.dock,"A3");
+	board.receiveAttack(player1.dock,"A2");
+	board.receiveAttack(player1.dock,"A4");
+	board.receiveAttack(player1.dock,"A5");
+	board.receiveAttack(player1.dock,"A1");
+	expect(vessel).toMatchObject({"length":5, "hits":5, "sunk": true});
 });
 
 //Creates a new gameboard
@@ -54,7 +69,8 @@ test("Checks if an horizontal position is valid", () => {
 	let board = new Gameboard();
 	board.newBoard();
 	let vessel = new Ship(5);
-	board.placeShip(vessel, "B2", "F2");
+	let player1 = new Player("Player 1");
+	board.placeShip(player1.dock,vessel, "B2", "F2");
 	expect(board.board).toMatchObject([
 		"A1","A2","A3","A4","A5","A6","A7","A8","A9","A10",
 		"B1","B3","B4","B5","B6","B7","B8","B9","B10",
@@ -74,7 +90,8 @@ test("Checks if a vertical position is valid", () => {
 	let board = new Gameboard();
 	board.newBoard();
 	let vessel = new Ship(5);
-	board.placeShip(vessel, "A2", "A6");
+	let player1 = new Player("Player 1");
+	board.placeShip(player1.dock,vessel, "A2", "A6");
 	expect(board.board).toMatchObject([
 		"A1","A7","A8","A9","A10",
 		"B1","B2","B3","B4","B5","B6","B7","B8","B9","B10",
@@ -94,28 +111,9 @@ test("Check the ship's position after placing on the board", () => {
 	let board = new Gameboard();
 	board.newBoard();
 	let vessel = new Ship(5);
-	board.placeShip(vessel, "A2", "A6");
+	let player1 = new Player("Player 1");
+	board.placeShip(player1.dock,vessel, "A2", "A6");
 	expect(vessel.position).toMatchObject(["A2","A3","A4","A5","A6"]);
-});
-
-//Registers a hit
-test("Checks if a boat was hit", () => {
-	let board = new Gameboard();
-	board.newBoard();
-	let vessel = new Ship(5);
-	board.placeShip(vessel, "A2", "A6");
-	board.receiveAttack("A2");
-	expect(vessel).toMatchObject({"length":5, "hits":1, "sunk": false});
-})
-
-//Registers a missed hit
-test("Checks if a missed hit is registered", () => {
-	let board = new Gameboard();
-	board.newBoard();
-	let vessel = new Ship(5);
-	board.placeShip(vessel, "A2", "A6");
-	board.receiveAttack("A1");
-	expect(board.misses).toMatchObject(["A1"]);
 });
 
 //Registers multiple missed hits
@@ -123,11 +121,12 @@ test("Checks if multiple missed hits are registered", () => {
 	let board = new Gameboard();
 	board.newBoard();
 	let vessel = new Ship(5);
-	board.placeShip(vessel, "A2", "A6");
-	board.receiveAttack("A1");
+	let player1 = new Player("Player 1");
+	board.placeShip(player1.dock,vessel, "A2", "A6");
+	board.receiveAttack(player1.dock, "A1");
 	let vessel2 = new Ship(3);
-	board.placeShip(vessel2, "B3", "B5");
-	board.receiveAttack("E1");
+	board.placeShip(player1.dock,vessel2, "B3", "B5");
+	board.receiveAttack(player1.dock,"E1");
 	expect(board.misses).toMatchObject(["A1","E1"]);
 });
 
@@ -136,12 +135,13 @@ test("Logs a Game Over message if all ships are sunk", () => {
 	let board = new Gameboard();
 	board.newBoard();
 	let vessel = new Ship(3);
-	board.placeShip(vessel, "A2", "A4");
-	board.receiveAttack("A2");
-	board.receiveAttack("A3");
-	board.receiveAttack("A4");
+	let player1 = new Player("Player 1");
+	board.placeShip(player1.dock, vessel, "A1", "A3");
+	board.receiveAttack(player1.dock,"A1");
+	board.receiveAttack(player1.dock,"A2");
+	board.receiveAttack(player1.dock,"A3");
 	const logSpy = jest.spyOn(global.console, 'log');
-	board.gameOver();
+	board.gameOver(player1);
 	expect(logSpy).toHaveBeenCalled();
     expect(logSpy).toHaveBeenCalledTimes(1);
     expect(logSpy).toHaveBeenCalledWith("Game Over");

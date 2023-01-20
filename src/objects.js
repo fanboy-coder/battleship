@@ -1,5 +1,3 @@
-let dock = [];
-
 class Ship {
 	constructor(length) {
 		this.length = length,
@@ -7,7 +5,7 @@ class Ship {
 			this.sunk = false,
 			this.position = [],
 			this.hit = function (num) {
-				this.hits = this.hits + num;
+				this.hits = this.hits + 1;
 			};
 		this.isSunk = function () {
 			if (this.hits >= length) {
@@ -19,8 +17,8 @@ class Ship {
 
 class Gameboard {
 	constructor() {
-		this.board = [];
-		this.misses = [];
+		this.board = [],
+			this.misses = [];
 		const columns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
 
 		this.newBoard = function () {
@@ -31,7 +29,7 @@ class Gameboard {
 			});
 		};
 
-		this.placeShip = function (ship, xPos, yPos) {
+		this.placeShip = function (dock, ship, xPos, yPos) {
 			let firstNum = xPos.slice(1, 3);
 			let secondNum = yPos.slice(1, 3);
 			let firstLetter = xPos.slice(0, 1);
@@ -80,21 +78,25 @@ class Gameboard {
 			};
 		};
 
-		this.receiveAttack = function (coordinates) {
-			for (let i = 0; i < dock.length; i++) {
-				if (!dock[i].position.includes(coordinates)) {
-					this.misses.push(coordinates);
-					break;
+		this.receiveAttack = function (dock, coordinates) {
+			let safe = [];
+			dock.forEach(ship => {
+				let check = ship.position.includes(coordinates);
+				if (check) {
+					ship.hit();
+					ship.isSunk();
 				}
-				else if (dock.find(test => test.position = coordinates)) {
-					dock[i].hit(1);
-					dock[i].isSunk();
+				else {
+					safe.push(ship);
 				};
-			};
+			})
+			if (safe = []) {
+				this.misses.push(coordinates);
+			}
 		};
 
-		this.gameOver = function () {
-			const check = dock.every(ship => ship.sunk = false);
+		this.gameOver = function (name) {
+			const check = name.dock.every(ship => ship.sunk = false);
 			if (!check) {
 				console.log("Game Over");
 			};
@@ -106,11 +108,12 @@ class Gameboard {
 class Player {
 	constructor(name) {
 		this.name = name,
+		this.dock = [],
 			this.plays = [],
 
 			this.randomPlay = function (board) {
 				let play = board.board[Math.floor(Math.random() * board.board.length)];
-				if(!this.plays.includes(play)){
+				if (!this.plays.includes(play)) {
 					board.receiveAttack(play);
 					this.plays.push(play);
 				}
