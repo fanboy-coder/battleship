@@ -1,42 +1,42 @@
 const { Ship, Gameboard, Player } = require("./objects");
-// const { domBoard } = require("./DOM");
+const { domBoard } = require("./DOM");
 
-let cpu = new Player("CPU");
-let cpuboard = new Gameboard();
-let cpucarrier = new Ship(5);
-let cpubattleship = new Ship(4);
-let cpusubmarine1 = new Ship(3);
-let cpusubmarine2 = new Ship(3);
-let cpudestroyer1 = new Ship(2);
-let cpudestroyer2 = new Ship(2);
-let cpudestroyer3 = new Ship(2);
-cpuboard.newBoard();
-cpuboard.placeShip(cpu.dock, cpucarrier, "A1", "A5");
-cpuboard.placeShip(cpu.dock, cpubattleship, "J1", "J4");
-cpuboard.placeShip(cpu.dock, cpusubmarine1, "B2", "D2");
-cpuboard.placeShip(cpu.dock, cpusubmarine2, "H1", "H3");
-cpuboard.placeShip(cpu.dock, cpudestroyer1, "C9", "C10");
-cpuboard.placeShip(cpu.dock, cpudestroyer2, "E3", "E4");
-cpuboard.placeShip(cpu.dock, cpudestroyer3, "I3", "J3");
+class GameController {
+	constructor() {
+		this.player = new Player("joel");
+		this.cpu = new Player("CPU");
+		this.playerBoard = new Gameboard();
+		this.playerBoard.newBoard();
+		this.cpuBoard = new Gameboard();
+		this.cpuBoard.newBoard();
+		domBoard();
+		this.carrier = new Ship(5);
+		this.battleship = new Ship(4);
+		this.submarine = new Ship(3);
+		this.destroyer = new Ship(2);
+		this.placeShipPlayer = function () {
+			this.playerBoard.placeShip(this.player.dock, this.carrier, "F1", "F5");
+			this.playerBoard.placeShip(this.player.dock, this.battleship, "J1", "J4");
+			this.playerBoard.placeShip(this.player.dock, this.submarine, "B2", "D2");
+			this.playerBoard.placeShip(this.player.dock, this.submarine, "H1", "H3");
+			this.playerBoard.placeShip(this.player.dock, this.destroyer, "C9", "C10");
+			this.playerBoard.placeShip(this.player.dock, this.destroyer, "E3", "E4");
+			this.playerBoard.placeShip(this.player.dock, this.destroyer, "I3", "J3");
+		};
+		this.placeShipPlayer();
+		this.placeShipCpu = function () {
+			this.cpuBoard.placeShip(this.cpu.dock, this.carrier, "F1", "F5");
+			this.cpuBoard.placeShip(this.cpu.dock, this.battleship, "J1", "J4");
+			this.cpuBoard.placeShip(this.cpu.dock, this.submarine, "B2", "D2");
+			this.cpuBoard.placeShip(this.cpu.dock, this.submarine, "H1", "H3");
+			this.cpuBoard.placeShip(this.cpu.dock, this.destroyer, "C9", "C10");
+			this.cpuBoard.placeShip(this.cpu.dock, this.destroyer, "E3", "E4");
+			this.cpuBoard.placeShip(this.cpu.dock, this.destroyer, "I3", "J3");
+		};
+		this.placeShipCpu();
+	}
+};
 
-let player = new Player("Joel");
-let playerboard = new Gameboard();
-let playercarrier = new Ship(5);
-let playerbattleship = new Ship(4);
-let playersubmarine1 = new Ship(3);
-let playersubmarine2 = new Ship(3);
-let playerdestroyer1 = new Ship(2);
-let playerdestroyer2 = new Ship(2);
-let playerdestroyer3 = new Ship(2);
-playerboard.newBoard();
-playerboard.placeShip(player.dock, playercarrier, "F1", "F5");
-playerboard.placeShip(player.dock, playerbattleship, "J1", "J4");
-playerboard.placeShip(player.dock, playersubmarine1, "B2", "D2");
-playerboard.placeShip(player.dock, playersubmarine2, "H1", "H3");
-playerboard.placeShip(player.dock, playerdestroyer1, "C9", "C10");
-playerboard.placeShip(player.dock, playerdestroyer2, "E3", "E4");
-playerboard.placeShip(player.dock, playerdestroyer3, "I3", "J3");
+const game = new GameController();
 
-// domBoard();
-
-module.exports = { newGame };
+module.exports = { GameController };

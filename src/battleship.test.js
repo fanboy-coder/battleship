@@ -1,5 +1,5 @@
 const {Ship, Gameboard, Player} = require("./objects");
-// const { newGame } = require("./index");
+const { GameController } = require("./index");
 
 //Ship factory tests
 

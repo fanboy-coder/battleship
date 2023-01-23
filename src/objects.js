@@ -18,7 +18,7 @@ class Ship {
 class Gameboard {
 	constructor() {
 		this.board = [],
-			this.misses = [];
+		this.misses = [];
 		const columns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
 
 		this.newBoard = function () {
