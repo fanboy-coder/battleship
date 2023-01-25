@@ -1,5 +1,7 @@
 const { Ship, Gameboard, Player } = require("./objects");
 const { domBoard } = require("./DOM");
+require("./styles/style.css");
+
 
 class GameController {
 	constructor() {
@@ -9,7 +11,7 @@ class GameController {
 		this.playerBoard.newBoard();
 		this.cpuBoard = new Gameboard();
 		this.cpuBoard.newBoard();
-		domBoard();
+		domBoard(this.playerBoard.board,this.cpuBoard.board);
 		this.carrier = new Ship(5);
 		this.battleship = new Ship(4);
 		this.submarine = new Ship(3);

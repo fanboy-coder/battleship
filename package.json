@@ -64,6 +64,7 @@
     "mime-types": "^2.1.35",
     "neo-async": "^2.6.2",
     "node-releases": "^2.0.8",
+    "npm-watch": "^0.11.0",
     "p-limit": "^2.3.0",
     "p-locate": "^4.1.0",
     "p-try": "^2.2.0",
@@ -93,6 +94,7 @@
     "terser-webpack-plugin": "^5.3.6",
     "update-browserslist-db": "^1.0.10",
     "uri-js": "^4.4.1",
+    "watch": "^0.13.0",
     "watchpack": "^2.4.0",
     "webpack-merge": "^5.8.0",
     "webpack-sources": "^3.2.3",
@@ -101,6 +103,7 @@
   },
   "scripts": {
     "test": "jest",
+    "watch": "webpack --watch",
     "build": "webpack"
   },
   "author": "",
