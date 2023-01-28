@@ -18,7 +18,8 @@ class Ship {
 class Gameboard {
 	constructor() {
 		this.board = [],
-		this.misses = [];
+			this.misses = [],
+			this.hits = [];
 		const columns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
 
 		this.newBoard = function () {
@@ -108,7 +109,7 @@ class Gameboard {
 class Player {
 	constructor(name) {
 		this.name = name,
-		this.dock = [],
+			this.dock = [],
 			this.plays = [],
 
 			this.randomPlay = function (board) {

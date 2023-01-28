@@ -1,5 +1,5 @@
 const { Ship, Gameboard, Player } = require("./objects");
-const { domBoard } = require("./DOM");
+const { domBoard, hits } = require("./DOM");
 require("./styles/style.css");
 
 
@@ -11,7 +11,7 @@ class GameController {
 		this.playerBoard.newBoard();
 		this.cpuBoard = new Gameboard();
 		this.cpuBoard.newBoard();
-		domBoard(this.playerBoard.board,this.cpuBoard.board);
+		domBoard(this.playerBoard,this.cpuBoard,this.player,this.cpu);
 		this.carrier = new Ship(5);
 		this.battleship = new Ship(4);
 		this.submarine = new Ship(3);
@@ -36,9 +36,11 @@ class GameController {
 			this.cpuBoard.placeShip(this.cpu.dock, this.destroyer, "I3", "J3");
 		};
 		this.placeShipCpu();
+		hits(this.playerBoard, this.cpuBoard);
 	}
 };
 
 const game = new GameController();
+console.log(game)
 
 module.exports = { GameController };
