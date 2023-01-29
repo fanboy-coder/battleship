@@ -109,10 +109,10 @@ test("Checks if a vertical position is valid", () => {
 test("Check the ship's position after placing on the board", () => {
 	let board = new Gameboard();
 	board.newBoard();
-	let vessel = new Ship(5);
+	let vessel = new Ship(3);
 	let player1 = new Player("Player 1");
-	board.placeShip(player1.dock,vessel, "A2", "A6");
-	expect(vessel.position).toMatchObject(["A2","A3","A4","A5","A6"]);
+	board.placeShip(player1.dock,vessel, "B2", "D2");
+	expect(vessel.position).toMatchObject(["B2","C2","D2"]);
 });
 
 //Registers multiple missed hits

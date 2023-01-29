@@ -81,16 +81,20 @@ class Gameboard {
 
 		this.receiveAttack = function (dock, coordinates) {
 			let safe = [];
-			dock.forEach(ship => {
-				let check = ship.position.includes(coordinates);
-				if (check) {
-					ship.hit();
-					ship.isSunk();
+			for (let i=0; i<dock.length;i++) {
+				for (let ship of dock[i].position) {
+					if (dock[i].position.includes(coordinates)){
+						dock[i].hit();
+						dock[i].isSunk();
+						this.hits.push(coordinates);
+						break;
+					}
+					else {
+						safe.push(coordinates);
+						break;
+					}
 				}
-				else {
-					safe.push(ship);
-				};
-			})
+			}
 			if (safe = []) {
 				this.misses.push(coordinates);
 			}
