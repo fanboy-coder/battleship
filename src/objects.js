@@ -52,13 +52,6 @@ class Gameboard {
 				numberPositions(letter + 1, firstNum);
 			};
 
-			function removeSpaces() {
-				result.forEach(entry => {
-					let place = board.indexOf(entry);
-					board.splice(place, 1);
-				});
-			};
-
 			if (!dock.includes(ship.name)) {
 				if ((firstNum - secondNum) === -ship.length + 1 || ((columns.indexOf(secondLetter) + 1) - columns.indexOf(firstLetter)) === ship.length) {
 					if (firstLetter === secondLetter) {
@@ -66,14 +59,12 @@ class Gameboard {
 						letterPositions(firstLetter, Number(firstNum));
 						ship.position = result;
 						dock.push(ship);
-						removeSpaces();
 					} else if (firstNum === secondNum) {
 						let letter = columns.indexOf(firstLetter);
 						result.length = 0;
 						numberPositions(letter, firstNum);
 						ship.position = result;
 						dock.push(ship);
-						removeSpaces();
 					} else {
 						console.log("Invalid position.");
 					}
@@ -122,14 +113,14 @@ class Player {
 			this.dock = [],
 			this.plays = [],
 
-			this.randomPlay = function (board) {
-				let play = board.board[Math.floor(Math.random() * board.board.length)];
+			this.randomPlay = function (player,playerBoard) {
+				let play = playerBoard.board[Math.floor(Math.random() * playerBoard.board.length)];
 				if (!this.plays.includes(play)) {
-					board.receiveAttack(play);
+					playerBoard.receiveAttack(player.dock,play);
 					this.plays.push(play);
 				}
 				else {
-					this.randomPlay(board);
+					this.randomPlay(player,playerBoard);
 				};
 			};
 	};

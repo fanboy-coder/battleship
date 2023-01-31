@@ -2,7 +2,6 @@ const { Ship, Gameboard, Player } = require("./objects");
 const { domBoard, hits } = require("./DOM");
 require("./styles/style.css");
 
-
 class GameController {
 	constructor() {
 		this.player = new Player("joel");
@@ -11,7 +10,6 @@ class GameController {
 		this.playerBoard.newBoard();
 		this.cpuBoard = new Gameboard();
 		this.cpuBoard.newBoard();
-		domBoard(this.playerBoard,this.cpuBoard,this.player,this.cpu);
 		this.carrier = new Ship("carrier",5);
 		this.battleship = new Ship("battleship",4);
 		this.submarine = new Ship("submarine",3);
@@ -28,7 +26,6 @@ class GameController {
 			this.playerBoard.placeShip(this.player.dock, this.destroyer2, "E3", "E4");
 			this.playerBoard.placeShip(this.player.dock, this.destroyer3, "I6", "J6");
 		};
-		this.placeShipPlayer();
 		this.placeShipCpu = function () {
 			this.cpuBoard.placeShip(this.cpu.dock, this.carrier, "F1", "F5");
 			this.cpuBoard.placeShip(this.cpu.dock, this.battleship, "J1", "J4");
@@ -38,12 +35,14 @@ class GameController {
 			this.cpuBoard.placeShip(this.cpu.dock, this.destroyer2, "E3", "E4");
 			this.cpuBoard.placeShip(this.cpu.dock, this.destroyer3, "I6", "J6");
 		};
-		this.placeShipCpu();
-		hits(this.playerBoard, this.cpuBoard);
 	}
 };
 
 const game = new GameController();
-console.log(game)
+domBoard(game.playerBoard,game.cpuBoard,game.player,game.cpu);
+game.placeShipPlayer();
+game.placeShipCpu();
+hits(game.playerBoard, game.cpuBoard);
+console.log(game);
 
 module.exports = { GameController };

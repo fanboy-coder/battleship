@@ -34,6 +34,7 @@ let domBoard = function (playerBoard, cpuBoard,player,cpu) {
 		cell.setAttribute("id", entry);
 		cell.addEventListener("click", () => {
 			cpuBoard.receiveAttack(cpu.dock,cell.id);
+			cpu.randomPlay(player,playerBoard);
 			hits(playerBoard,cpuBoard);
 		})
 	});

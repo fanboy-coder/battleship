@@ -41,16 +41,18 @@ h3 {
 	cursor: pointer;
 }
 
-.player-cell, .cpu-cell {
+.player-cell, .cpu-cell, .hit, .miss {
 	border: 1px solid white;
+}
+
+.hit, .miss {
+	background-repeat: no-repeat;
 }
 
 .hit {
 	background-image: url(./images/circle-medium.svg);
-	background-repeat: no-repeat;
 }
 
 .miss {
 	background-image: url(./images/alpha-x.svg);
-	background-repeat: no-repeat;
 }
