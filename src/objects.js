@@ -1,5 +1,6 @@
 class Ship {
-	constructor(length) {
+	constructor(name,length) {
+		this.name = name,
 		this.length = length,
 			this.hits = 0,
 			this.sunk = false,
@@ -58,25 +59,30 @@ class Gameboard {
 				});
 			};
 
-			if ((firstNum - secondNum) === -ship.length + 1 || ((columns.indexOf(secondLetter) + 1) - columns.indexOf(firstLetter)) === ship.length) {
-				if (firstLetter === secondLetter) {
-					result.length = 0;
-					letterPositions(firstLetter, Number(firstNum));
-					ship.position = result;
-					dock.push(ship);
-					removeSpaces();
-				} else if (firstNum === secondNum) {
-					let letter = columns.indexOf(firstLetter);
-					result.length = 0;
-					numberPositions(letter, firstNum);
-					ship.position = result;
-					removeSpaces();
+			if (!dock.includes(ship.name)) {
+				if ((firstNum - secondNum) === -ship.length + 1 || ((columns.indexOf(secondLetter) + 1) - columns.indexOf(firstLetter)) === ship.length) {
+					if (firstLetter === secondLetter) {
+						result.length = 0;
+						letterPositions(firstLetter, Number(firstNum));
+						ship.position = result;
+						dock.push(ship);
+						removeSpaces();
+					} else if (firstNum === secondNum) {
+						let letter = columns.indexOf(firstLetter);
+						result.length = 0;
+						numberPositions(letter, firstNum);
+						ship.position = result;
+						dock.push(ship);
+						removeSpaces();
+					} else {
+						console.log("Invalid position.");
+					}
 				} else {
-					console.log("Invalid position");
-				}
+					console.log("The spaces you selected do not match your ship's size.")
+				};
 			} else {
-				console.log("The spaces you selected do not match your ship's size.")
-			};
+				console.log("That ship was already placed on the board.");
+			}
 		};
 
 		this.receiveAttack = function (dock, coordinates) {

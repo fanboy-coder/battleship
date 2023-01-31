@@ -64,6 +64,4 @@ let hits = function(playerBoard,cpuBoard) {
 	
 };
 
-
-
 module.exports = { domBoard, hits };

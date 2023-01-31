@@ -1,6 +1,5 @@
 const {Ship, Gameboard, Player} = require("./objects");
-
-//Ship factory tests
+const { GameController } = require("./index");
 
 //Creates a Carrier ship
 test("Creates a Carrier ship", () => {
@@ -109,10 +108,10 @@ test("Checks if a vertical position is valid", () => {
 test("Check the ship's position after placing on the board", () => {
 	let board = new Gameboard();
 	board.newBoard();
-	let vessel = new Ship(3);
+	let vessel = new Ship(2);
 	let player1 = new Player("Player 1");
-	board.placeShip(player1.dock,vessel, "B2", "D2");
-	expect(vessel.position).toMatchObject(["B2","C2","D2"]);
+	board.placeShip(player1.dock,vessel, "I6", "J6");
+	expect(vessel.position).toMatchObject(["I6","J6"]);
 });
 
 //Registers multiple missed hits
