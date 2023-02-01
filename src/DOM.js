@@ -1,7 +1,58 @@
 const { Ship, Gameboard, Player } = require("./objects");
+const { GameController } = require("./index")
+
+let startWindow = function (game) {
+	let container = document.querySelector(".container");
+	let background = container.appendChild(document.createElement("div"));
+	background.setAttribute("id", "modal-bg-display");
+	let modal = background.appendChild(document.createElement("div"));
+	modal.setAttribute("class", "modal");
+	let h1 = modal.appendChild(document.createElement("h1"));
+	h1.textContent = "WELCOME TO BATTLESHIP";
+	let button = modal.appendChild(document.createElement("btn"));
+	button.textContent = "NEW GAME";
+	button.setAttribute("class", "button");
+	button.addEventListener("click", () => {
+		game.placeShipPlayer();
+		game.placeShipCpu();
+		hits(game.playerBoard, game.cpuBoard);
+		background.remove();
+		console.log(game);
+	})
+}
+
+let gameoverWindow = function (player, cpu) {
+	let winner = "";
+	if (player.lost == true) {
+		winner = "Player";
+	}
+	else if (cpu.lost == true) {
+		winner = "CPU";
+	}
+	if (winner != "") {
+		let container = document.querySelector(".container");
+		let background = container.appendChild(document.createElement("div"));
+		background.setAttribute("id", "modal-bg-display");
+		let modal = background.appendChild(document.createElement("div"));
+		modal.setAttribute("class", "modal");
+		let h1 = modal.appendChild(document.createElement("h1"));
+		h1.textContent = "GAME OVER! " + winner + " WON THE GAME!";
+		let button = modal.appendChild(document.createElement("btn"));
+		button.textContent = "NEW GAME";
+		button.setAttribute("class", "button");
+		button.addEventListener("click", () => {
+			const game = new GameController();
+			game.placeShipPlayer();
+			game.placeShipCpu();
+			hits(game.playerBoard, game.cpuBoard);
+			background.remove();
+			console.log(game);
+		})
+	}
+};
 
 //generates both player's boards
-let domBoard = function (playerBoard, cpuBoard,player,cpu) {
+let domBoard = function (playerBoard, cpuBoard, player, cpu) {
 	let container = document.querySelector(".container");
 	let playarea = container.appendChild(document.createElement("div"));
 	playarea.setAttribute("id", "play-area");
@@ -33,36 +84,39 @@ let domBoard = function (playerBoard, cpuBoard,player,cpu) {
 		cell.setAttribute("class", "cpu-cell")
 		cell.setAttribute("id", entry);
 		cell.addEventListener("click", () => {
-			cpuBoard.receiveAttack(cpu.dock,cell.id);
-			cpu.randomPlay(player,playerBoard);
-			hits(playerBoard,cpuBoard);
+			cpuBoard.receiveAttack(cpu.dock, cell.id);
+			cpu.randomPlay(player, playerBoard);
+			hits(playerBoard, cpuBoard);
+			cpu.gameOver();
+			player.gameOver();
+			gameoverWindow(player, cpu);
 		})
 	});
 };
 
 //marks the hits and misses on each board
-let hits = function(playerBoard,cpuBoard) {
+let hits = function (playerBoard, cpuBoard) {
 	let cpuCell = document.querySelectorAll(".cpu-cell");
 	let playerCell = document.querySelectorAll(".player-cell");
 
 	cpuCell.forEach(cell => {
 		if (cpuBoard.misses.includes(cell.id)) {
-			cell.setAttribute("class","miss");
+			cell.setAttribute("class", "miss");
 		}
-		if(cpuBoard.hits.includes(cell.id)) {
-			cell.setAttribute("class","hit");
+		if (cpuBoard.hits.includes(cell.id)) {
+			cell.setAttribute("class", "hit");
 		}
 	});
 
 	playerCell.forEach(cell => {
 		if (playerBoard.misses.includes(cell.id)) {
-			cell.setAttribute("class","miss");
+			cell.setAttribute("class", "miss");
 		}
-		if(playerBoard.hits.includes(cell.id)) {
-			cell.setAttribute("class","hit");
+		if (playerBoard.hits.includes(cell.id)) {
+			cell.setAttribute("class", "hit");
 		}
 	});
-	
+
 };
 
-module.exports = { domBoard, hits };
+module.exports = { startWindow, domBoard, hits };

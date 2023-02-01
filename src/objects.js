@@ -96,14 +96,6 @@ class Gameboard {
 				this.misses.push(coordinates);
 			}
 		};
-
-		this.gameOver = function (name) {
-			const check = name.dock.every(ship => ship.sunk = false);
-			if (!check) {
-				console.log("Game Over");
-			};
-		};
-
 	};
 };
 
@@ -112,6 +104,7 @@ class Player {
 		this.name = name,
 			this.dock = [],
 			this.plays = [],
+			this.lost = false,
 
 			this.randomPlay = function (player,playerBoard) {
 				let play = playerBoard.board[Math.floor(Math.random() * playerBoard.board.length)];
@@ -121,6 +114,12 @@ class Player {
 				}
 				else {
 					this.randomPlay(player,playerBoard);
+				};
+			};
+
+			this.gameOver = function () {
+				if (this.dock.every(ship => ship.sunk == true)) {
+					this.lost = true;
 				};
 			};
 	};

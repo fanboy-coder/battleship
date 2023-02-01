@@ -15,7 +15,8 @@
 }
 
 h1,
-h3 {
+h3,
+.button {
 	font-family: 'Zen Tokyo Zoo', cursive;
 	font-size: xx-large;
 	text-align: center;
@@ -55,4 +56,49 @@ h3 {
 
 .miss {
 	background-image: url(./images/alpha-x.svg);
+}
+
+#modal-bg-display {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color:rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: visibility 0s opactity 0,5s;
+}
+
+.modal {
+    background-color: white;
+	border: 5px solid rgb(96, 94, 94);
+    height: 40%;
+    width: 40%;
+    display: flex;
+    align-items: center;
+	justify-content: center;
+    flex-direction: column;
+    border-radius: 1%;
+	gap: 20%;
+}
+
+.button {
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: 10px;
+    min-height: 5vh;
+    min-width: 40vh;
+	background-color: rgb(96, 94, 94);
+	color: white;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	font-size:x-large;
+	transition: all .2s ease-in-out; 
+}
+
+.button:hover{
+	transform: scale(1.1); 
 }
