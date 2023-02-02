@@ -1,7 +1,7 @@
 class Ship {
-	constructor(name,length) {
+	constructor(name, length) {
 		this.name = name,
-		this.length = length,
+			this.length = length,
 			this.hits = 0,
 			this.sunk = false,
 			this.position = [],
@@ -76,11 +76,37 @@ class Gameboard {
 			}
 		};
 
+		this.randomPlaceShip = function (cpu,ship) {
+			let let1 = columns[Math.floor(Math.random() * columns.length)];
+			let num1 = Math.floor(Math.random() * (10 - 1 + 1)) + 1;
+			// let coord1 = let1 += num1;
+			if (num1 < 5) {
+				let num2 = (num1 + 5) - 1;
+				let let2 = let1;
+				let xPos = let1+=num1;
+				let yPos = let2+=num2;
+				console.log(xPos,yPos);
+				cpu.dock.push(ship);
+			} else {
+				let num2 = num1;
+				let pos = columns.indexOf(let1);
+				if (pos < 5) {
+					let let2 = columns[(pos+5)-1];
+					let xPos = let1+=num1;
+					let yPos = let2+=num2;
+					console.log(xPos,yPos);
+					cpu.dock.push(ship);
+				} else {
+					this.randomPlaceShip(cpu,ship);
+				}
+			}
+		}
+
 		this.receiveAttack = function (dock, coordinates) {
 			let safe = [];
-			for (let i=0; i<dock.length;i++) {
+			for (let i = 0; i < dock.length; i++) {
 				for (let ship of dock[i].position) {
-					if (dock[i].position.includes(coordinates)){
+					if (dock[i].position.includes(coordinates)) {
 						dock[i].hit();
 						dock[i].isSunk();
 						this.hits.push(coordinates);
@@ -106,22 +132,22 @@ class Player {
 			this.plays = [],
 			this.lost = false,
 
-			this.randomPlay = function (player,playerBoard) {
+			this.randomPlay = function (player, playerBoard) {
 				let play = playerBoard.board[Math.floor(Math.random() * playerBoard.board.length)];
 				if (!this.plays.includes(play)) {
-					playerBoard.receiveAttack(player.dock,play);
+					playerBoard.receiveAttack(player.dock, play);
 					this.plays.push(play);
 				}
 				else {
-					this.randomPlay(player,playerBoard);
+					this.randomPlay(player, playerBoard);
 				};
 			};
 
-			this.gameOver = function () {
-				if (this.dock.every(ship => ship.sunk == true)) {
-					this.lost = true;
-				};
+		this.gameOver = function () {
+			if (this.dock.every(ship => ship.sunk == true)) {
+				this.lost = true;
 			};
+		};
 	};
 };
 

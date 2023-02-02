@@ -34,13 +34,13 @@ class GameController {
 			this.playerBoard.placeShip(this.player.dock, this.destroyer3, "I6", "J6");
 		};
 		this.placeShipCpu = function () {
-			this.cpuBoard.placeShip(this.cpu.dock, this.cpucarrier, "F1", "F5");
-			this.cpuBoard.placeShip(this.cpu.dock, this.cpubattleship, "J1", "J4");
-			this.cpuBoard.placeShip(this.cpu.dock, this.cpusubmarine, "B2", "D2");
-			this.cpuBoard.placeShip(this.cpu.dock, this.cpusubmarine2, "H1", "H3");
-			this.cpuBoard.placeShip(this.cpu.dock, this.cpudestroyer, "C9", "C10");
-			this.cpuBoard.placeShip(this.cpu.dock, this.cpudestroyer2, "E3", "E4");
-			this.cpuBoard.placeShip(this.cpu.dock, this.cpudestroyer3, "I6", "J6");
+			this.cpuBoard.randomPlaceShip(this.cpu,this.cpucarrier);
+			this.cpuBoard.randomPlaceShip(this.cpu,this.cpubattleship);
+			this.cpuBoard.randomPlaceShip(this.cpu,this.cpusubmarine);
+			this.cpuBoard.randomPlaceShip(this.cpu,this.cpusubmarine2);
+			this.cpuBoard.randomPlaceShip(this.cpu,this.cpudestroyer);
+			this.cpuBoard.randomPlaceShip(this.cpu,this.cpudestroyer2);
+			this.cpuBoard.randomPlaceShip(this.cpu,this.cpudestroyer3);
 		};
 	}
 };
