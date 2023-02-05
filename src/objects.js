@@ -48,7 +48,7 @@ class Gameboard {
 
 			function numberPositions(letter, firstNum) {
 				if (result.length === ship.length) return;
-				result.push(columns[letter] += firstNum);
+				result.push(columns[letter] + firstNum);
 				numberPositions(letter + 1, firstNum);
 			};
 
@@ -60,7 +60,7 @@ class Gameboard {
 						ship.position = result;
 						dock.push(ship);
 					} else if (firstNum === secondNum) {
-						let letter = columns.indexOf(firstLetter);
+						const letter = columns.indexOf(firstLetter);
 						result.length = 0;
 						numberPositions(letter, firstNum);
 						ship.position = result;
@@ -77,30 +77,28 @@ class Gameboard {
 		};
 
 		this.randomPlaceShip = function (cpu,ship) {
-			let let1 = columns[Math.floor(Math.random() * columns.length)];
-			let num1 = Math.floor(Math.random() * (10 - 1 + 1)) + 1;
-			// let coord1 = let1 += num1;
-			if (num1 < 5) {
-				let num2 = (num1 + 5) - 1;
-				let let2 = let1;
-				let xPos = let1+=num1;
-				let yPos = let2+=num2;
-				console.log(xPos,yPos);
-				cpu.dock.push(ship);
+			const letter1 = columns[Math.floor(Math.random() * columns.length)];
+			const num1 = Math.floor(Math.random() * (10 - 1 + 1)) + 1;
+			if (num1 <= ship.length+1) {
+				const num2 = (num1 + ship.length) - 1;
+				const xPos = letter1+num1;
+				const yPos = letter1+num2;
+				this.placeShip(cpu.dock,ship,xPos,yPos);
 			} else {
-				let num2 = num1;
-				let pos = columns.indexOf(let1);
-				if (pos < 5) {
-					let let2 = columns[(pos+5)-1];
-					let xPos = let1+=num1;
-					let yPos = let2+=num2;
-					console.log(xPos,yPos);
-					cpu.dock.push(ship);
+				const pos = columns.indexOf(letter1);
+				if (pos <= ship.length+1) {
+					const letter2 = columns[(pos+ship.length)-1];
+					const xPos = letter1+num1;
+					const yPos = letter2+num1;
+					this.placeShip(cpu.dock,ship,xPos,yPos);
 				} else {
-					this.randomPlaceShip(cpu,ship);
-				}
-			}
-		}
+					const letter2 = columns[(pos-ship.length)+1];
+					const xPos = letter2+num1;
+					const yPos = letter1+num1;
+					this.placeShip(cpu.dock,ship,xPos,yPos);
+				};
+			};
+		};
 
 		this.receiveAttack = function (dock, coordinates) {
 			let safe = [];
