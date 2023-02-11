@@ -46,6 +46,7 @@ class GameController {
 };
 
 const game = new GameController();
+console.log(game)
 startWindow(game);
 domBoard(game.playerBoard, game.cpuBoard, game.player, game.cpu);
 

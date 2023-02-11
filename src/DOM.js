@@ -15,9 +15,7 @@ let startWindow = function (game) {
 	button.addEventListener("click", () => {
 		game.placeShipPlayer();
 		game.placeShipCpu();
-		hits(game.playerBoard, game.cpuBoard);
 		background.remove();
-		console.log(game);
 	})
 }
 
@@ -68,7 +66,7 @@ let domBoard = function (playerBoard, cpuBoard, player, cpu) {
 	playerBoard.board.forEach(entry => {
 		let cell = playerArea.appendChild(document.createElement("div"));
 		cell.setAttribute("class", "player-cell")
-		cell.setAttribute("id", entry);
+		cell.setAttribute("id", "player-" + entry);
 	});
 
 	const cpuColumn = playarea.appendChild(document.createElement("div"));
@@ -82,11 +80,12 @@ let domBoard = function (playerBoard, cpuBoard, player, cpu) {
 	cpuBoard.board.forEach(entry => {
 		let cell = cpuArea.appendChild(document.createElement("div"));
 		cell.setAttribute("class", "cpu-cell")
-		cell.setAttribute("id", entry);
+		cell.setAttribute("id", "cpu-" + entry);
 		cell.addEventListener("click", () => {
-			cpuBoard.receiveAttack(cpu.dock, cell.id);
+			let coordinate = cell.id.slice(4,7);
+			cpuBoard.receiveAttack(cpu.dock, coordinate);
 			cpu.randomPlay(player, playerBoard);
-			hits(playerBoard, cpuBoard);
+			hits(player, playerBoard, cpu, cpuBoard);
 			cpu.gameOver();
 			player.gameOver();
 			gameoverWindow(player, cpu);
@@ -95,28 +94,58 @@ let domBoard = function (playerBoard, cpuBoard, player, cpu) {
 };
 
 //marks the hits and misses on each board
-let hits = function (playerBoard, cpuBoard) {
+let hits = function (player, playerBoard, cpu, cpuBoard) {
 	let cpuCell = document.querySelectorAll(".cpu-cell");
 	let playerCell = document.querySelectorAll(".player-cell");
 
+	console.log("misses are: " + cpuBoard.misses)
+	console.log("hits are: " + cpuBoard.hits)
+
 	cpuCell.forEach(cell => {
-		if (cpuBoard.misses.includes(cell.id)) {
-			cell.setAttribute("class", "miss");
+		if (cpuBoard.misses.includes(cell.id.slice(4,7))) {
+			cell.classList.add("miss");
 		}
-		if (cpuBoard.hits.includes(cell.id)) {
-			cell.setAttribute("class", "hit");
+		if (cpuBoard.hits.includes(cell.id.slice(4,7))) {
+			cell.classList.add("hit");
 		}
 	});
 
 	playerCell.forEach(cell => {
-		if (playerBoard.misses.includes(cell.id)) {
-			cell.setAttribute("class", "miss");
+		if (playerBoard.misses.includes(cell.id.slice(7,9))) {
+			cell.classList.add("miss");
 		}
-		if (playerBoard.hits.includes(cell.id)) {
-			cell.setAttribute("class", "hit");
+		if (playerBoard.hits.includes(cell.id.slice(7,9))) {
+			cell.classList.add("hit");
 		}
 	});
-
+	checkSunk(player);
+	checkSunk(cpu);
 };
+
+let checkSunk = function (current) {
+	let cpuCells = document.querySelectorAll(".cpu-cell");
+	let playerCells = document.querySelectorAll(".player-cell");
+
+	for (let i = 0; i < current.dock.length; i++) {
+		if (current.dock[i].sunk) {
+			let cells = current.dock[i].position;
+			if (current.name == "CPU") {
+				cpuCells.forEach(cell => {
+					if(cells.includes(cell.id.slice(4,7))) {
+						cell.classList.remove("hit");
+						cell.classList.add("sunk");
+					}
+				})
+			} else {
+				playerCells.forEach(cell => {
+					if(cells.includes(cell.id.slice(7,9))){
+						cell.classList.remove("hit");
+						cell.classList.add("sunk");
+					}
+				});
+			}
+		}
+	}
+}
 
 module.exports = { startWindow, domBoard, hits };

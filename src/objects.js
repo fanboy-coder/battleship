@@ -76,47 +76,40 @@ class Gameboard {
 			}
 		};
 
-		this.randomPlaceShip = function (cpu,ship) {
+		this.randomPlaceShip = function (cpu, ship) {
 			const letter1 = columns[Math.floor(Math.random() * columns.length)];
 			const num1 = Math.floor(Math.random() * (10 - 1 + 1)) + 1;
-			if (num1 <= ship.length+1) {
+			if (num1 <= ship.length + 1) {
 				const num2 = (num1 + ship.length) - 1;
-				const xPos = letter1+num1;
-				const yPos = letter1+num2;
-				this.placeShip(cpu.dock,ship,xPos,yPos);
+				const xPos = letter1 + num1;
+				const yPos = letter1 + num2;
+				this.placeShip(cpu.dock, ship, xPos, yPos);
 			} else {
 				const pos = columns.indexOf(letter1);
-				if (pos <= ship.length+1) {
-					const letter2 = columns[(pos+ship.length)-1];
-					const xPos = letter1+num1;
-					const yPos = letter2+num1;
-					this.placeShip(cpu.dock,ship,xPos,yPos);
+				if (pos <= ship.length + 1) {
+					const letter2 = columns[(pos + ship.length) - 1];
+					const xPos = letter1 + num1;
+					const yPos = letter2 + num1;
+					this.placeShip(cpu.dock, ship, xPos, yPos);
 				} else {
-					const letter2 = columns[(pos-ship.length)+1];
-					const xPos = letter2+num1;
-					const yPos = letter1+num1;
-					this.placeShip(cpu.dock,ship,xPos,yPos);
+					const letter2 = columns[(pos - ship.length) + 1];
+					const xPos = letter2 + num1;
+					const yPos = letter1 + num1;
+					this.placeShip(cpu.dock, ship, xPos, yPos);
 				};
 			};
 		};
 
 		this.receiveAttack = function (dock, coordinates) {
-			let safe = [];
 			for (let i = 0; i < dock.length; i++) {
-				for (let ship of dock[i].position) {
-					if (dock[i].position.includes(coordinates)) {
+				if (dock[i].position.includes(coordinates)) {
+						safe = [];
 						dock[i].hit();
 						dock[i].isSunk();
 						this.hits.push(coordinates);
-						break;
-					}
-					else {
-						safe.push(coordinates);
-						break;
-					}
 				}
 			}
-			if (safe = []) {
+			if (this.hits.slice(-1) != coordinates) {
 				this.misses.push(coordinates);
 			}
 		};
