@@ -81,7 +81,8 @@ let domBoard = function (playerBoard, cpuBoard, player, cpu) {
 		let cell = cpuArea.appendChild(document.createElement("div"));
 		cell.setAttribute("class", "cpu-cell")
 		cell.setAttribute("id", "cpu-" + entry);
-		cell.addEventListener("click", () => {
+		cell.addEventListener("click", play);
+		function play() {
 			let coordinate = cell.id.slice(4,7);
 			cpuBoard.receiveAttack(cpu.dock, coordinate);
 			cpu.randomPlay(player, playerBoard);
@@ -89,7 +90,8 @@ let domBoard = function (playerBoard, cpuBoard, player, cpu) {
 			cpu.gameOver();
 			player.gameOver();
 			gameoverWindow(player, cpu);
-		})
+			cell.removeEventListener("click", play)
+		}
 	});
 };
 
@@ -97,9 +99,6 @@ let domBoard = function (playerBoard, cpuBoard, player, cpu) {
 let hits = function (player, playerBoard, cpu, cpuBoard) {
 	let cpuCell = document.querySelectorAll(".cpu-cell");
 	let playerCell = document.querySelectorAll(".player-cell");
-
-	console.log("misses are: " + cpuBoard.misses)
-	console.log("hits are: " + cpuBoard.hits)
 
 	cpuCell.forEach(cell => {
 		if (cpuBoard.misses.includes(cell.id.slice(4,7))) {
@@ -111,10 +110,10 @@ let hits = function (player, playerBoard, cpu, cpuBoard) {
 	});
 
 	playerCell.forEach(cell => {
-		if (playerBoard.misses.includes(cell.id.slice(7,9))) {
+		if (playerBoard.misses.includes(cell.id.slice(7,10))) {
 			cell.classList.add("miss");
 		}
-		if (playerBoard.hits.includes(cell.id.slice(7,9))) {
+		if (playerBoard.hits.includes(cell.id.slice(7,10))) {
 			cell.classList.add("hit");
 		}
 	});
