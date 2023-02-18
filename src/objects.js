@@ -1,3 +1,5 @@
+const { strategicStrike } = require("./DOM");
+
 class Ship {
 	constructor(name, length) {
 		this.name = name,
@@ -124,14 +126,27 @@ class Player {
 			this.lost = false,
 
 			this.randomPlay = function (player, playerBoard) {
-				let play = playerBoard.board[Math.floor(Math.random() * playerBoard.board.length)];
-				if (!this.plays.includes(play)) {
-					playerBoard.receiveAttack(player.dock, play);
-					this.plays.push(play);
+
+				let checkForTarget = function(player) {
+					for(let i =0; i<player.dock.length;i++) {
+						if (player.dock[i].hits > 0 && player.dock[i].sunk == false) {
+							return true;
+						};
+					}
 				}
-				else {
-					this.randomPlay(player, playerBoard);
-				};
+
+				if (checkForTarget(player)) {
+					strategicStrike(player,playerBoard);
+				} else {
+					let play = playerBoard.board[Math.floor(Math.random() * playerBoard.board.length)];
+					if (!this.plays.includes(play)) {
+						playerBoard.receiveAttack(player.dock, play);
+						this.plays.push(play);
+					}
+					else {
+						this.randomPlay(player, playerBoard);
+					};
+				}
 			};
 
 		this.gameOver = function () {
