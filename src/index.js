@@ -1,5 +1,5 @@
 const { Ship, Gameboard, Player } = require("./objects");
-const { startWindow, domBoard, hits } = require("./DOM");
+const { startWindow, domBoard } = require("./DOM");
 require("./styles/style.css");
 
 class GameController {
