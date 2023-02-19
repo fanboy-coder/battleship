@@ -125,7 +125,7 @@ class Player {
 			this.plays = [],
 			this.lost = false,
 
-			this.randomPlay = function (player, playerBoard) {
+			this.randomPlay = function (player, playerBoard,cpu) {
 
 				let checkForTarget = function(player) {
 					for(let i =0; i<player.dock.length;i++) {
@@ -136,7 +136,7 @@ class Player {
 				}
 
 				if (checkForTarget(player)) {
-					strategicStrike(player,playerBoard);
+					strategicStrike(player,playerBoard,cpu);
 				} else {
 					let play = playerBoard.board[Math.floor(Math.random() * playerBoard.board.length)];
 					if (!this.plays.includes(play)) {

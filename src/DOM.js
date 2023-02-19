@@ -23,10 +23,10 @@ let startWindow = function (game) {
 let gameoverWindow = function (player, cpu) {
 	let winner = "";
 	if (player.lost == true) {
-		winner = "Player";
+		winner = "CPU";
 	}
 	else if (cpu.lost == true) {
-		winner = "CPU";
+		winner = "Player";
 	}
 	if (winner != "") {
 		let container = document.querySelector(".container");
@@ -86,7 +86,7 @@ let domBoard = function (playerBoard, cpuBoard, player, cpu) {
 		function play() {
 			let coordinate = cell.id.slice(4, 7);
 			cpuBoard.receiveAttack(cpu.dock, coordinate);
-			cpu.randomPlay(player, playerBoard);
+			cpu.randomPlay(player, playerBoard,cpu);
 			hits(player, playerBoard, cpu, cpuBoard);
 			cpu.gameOver();
 			player.gameOver();
@@ -96,72 +96,67 @@ let domBoard = function (playerBoard, cpuBoard, player, cpu) {
 	});
 };
 
-let strategicStrike = function (player, playerBoard) {
+let strategicStrike = function (player, playerBoard, cpu) {
 	let hit = [];
 	const columns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
 	let playerCell = document.querySelectorAll(".player-cell");
 	playerCell.forEach(cell => {
 		if (cell.classList.contains("hit")) {
-			hit = [];
 			hit.push(cell.id);
 		};
 	});
 
 	if (hit.length != 0) {
-		const right = "player-" + hit[0].slice(7, 8) + (Math.floor(hit[0].slice(8, 10)) + 1);
-		const left = "player-" + hit[0].slice(7, 8) + (Math.floor(hit[0].slice(8, 10)) - 1);
-		const up = "player-" + columns[columns.indexOf(hit[0].slice(7, 8)) - 1] + (Math.floor(hit[0].slice(8, 10)));
-		const down = "player-" + columns[columns.indexOf(hit[0].slice(7, 8)) + 1] + (Math.floor(hit[0].slice(8, 10)));
-
-		let checkConditions = function (side) {
-			let conditions = [!document.getElementById(side).classList.contains("hit") ||
-				!document.getElementById(side).classList.contains("miss") ||
-				!document.getElementById(side).classList.contains("sunk")];
-			if (conditions) {
-				return true;
+		for (let i=0;i<hit.length;i++) {
+			const right = "player-" + hit[i].slice(7, 8) + (Math.floor(hit[i].slice(8, 10)) + 1);
+			const left = "player-" + hit[i].slice(7, 8) + (Math.floor(hit[i].slice(8, 10)) - 1);
+			const up = "player-" + columns[columns.indexOf(hit[i].slice(7, 8)) - 1] + (Math.floor(hit[i].slice(8, 10)));
+			const down = "player-" + columns[columns.indexOf(hit[i].slice(7, 8)) + 1] + (Math.floor(hit[i].slice(8, 10)));
+		
+			let checkConditions = function (side) {
+				let conditions = !document.getElementById(side).classList.contains("hit") &&
+					!document.getElementById(side).classList.contains("miss") &&
+					!document.getElementById(side).classList.contains("sunk");
+				if (conditions) {
+					return true;
+				};
 			};
-		};
-
-		if (right.slice(8, 10) < 11) {
-			if (checkConditions(right)) {
-				playerBoard.receiveAttack(player.dock, right.slice(7, 10));
-				console.log("hit here")
-			} else if (left.slice(8, 10) >= 1) {
-				if (checkConditions(left)) {
-					playerBoard.receiveAttack(player.dock, left.slice(7, 10));
-				} else if (up.slice(7, 16) != "undefined") {
-					if (checkConditions(up)) {
-						playerBoard.receiveAttack(player.dock, up.slice(7, 10));
-					} else if (down.slice(7, 16) != "undefined") {
-						if (checkConditions(down)) {
-							playerBoard.receiveAttack(player.dock, down.slice(7, 10));
-						} else {
-							cpu.randomPlay(player, playerBoard);
+			
+			let checkTarget = function(i=0){
+				if (right.slice(8, 10) < 11) {
+					if (checkConditions(right)) {
+						playerBoard.receiveAttack(player.dock, right.slice(7, 10));
+						cpu.plays.push(right.slice(7, 10));
+						console.log("hit right")
+					} else {
+						if (left.slice(8, 10) >= 1) {
+							if (checkConditions(left)) {
+								playerBoard.receiveAttack(player.dock, left.slice(7, 10));
+								cpu.plays.push(left.slice(7, 10));
+								console.log("hit left")
+							} else {
+								if (up.slice(7, 16) != "undefined") {
+									if (checkConditions(up)) {
+										playerBoard.receiveAttack(player.dock, up.slice(7, 10));
+										cpu.plays.push(up.slice(7, 10));
+										console.log("hit up")
+									} else {
+										if (down.slice(7, 16) != "undefined") {
+											playerBoard.receiveAttack(player.dock, down.slice(7, 10));
+											cpu.plays.push(down.slice(7, 10));
+											console.log("hit down")
+										} else {
+											checkTarget(i++);
+										}
+									}
+								}
+							}
 						}
-				}
+				} 
+				};
 			}
-		} 
-		};
-
-		// if (right.slice(8, 10) < 11) {
-		// 	if (checkConditions(right)) {
-		// 		playerBoard.receiveAttack(player.dock, right.slice(7, 10));
-		// 	}
-		// } else if (left.slice(8, 10) >= 1) {
-		// 	if (checkConditions(left)) {
-		// 		playerBoard.receiveAttack(player.dock, left.slice(7, 10));
-		// 	}
-		// } else if (up.slice(7, 16) != "undefined") {
-		// 	if (checkConditions(up)) {
-		// 		playerBoard.receiveAttack(player.dock, up.slice(7, 10));
-		// 	}
-		// } else if (down.slice(7, 16) != "undefined") {
-		// 	if (checkConditions(down)) {
-		// 		playerBoard.receiveAttack(player.dock, down.slice(7, 10));
-		// 	}
-		// } else {
-		// 	cpu.randomPlay(player, playerBoard);
-		// }
+			checkTarget(i);	
+		}
 	}
 };
 
