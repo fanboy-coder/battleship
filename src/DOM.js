@@ -121,37 +121,121 @@ let strategicStrike = function (player, playerBoard, cpu) {
 			};
 		};
 
-		let checkTarget = function (i) {
-			if (right.slice(8, 10) < 11) {
+		let attack = function(side) {
+			playerBoard.receiveAttack(player.dock, side.slice(7, 10));
+			cpu.plays.push(side.slice(7, 10));
+		};
+
+		const extraRightCondition = right.slice(8, 10) < 11;
+		const extraLeftCondition = left.slice(8, 10) != 0;
+		const extraUpCondition = up.slice(7, 16) != "undefined";
+		const extraDownCondition = down.slice(7, 16) != "undefined";
+
+		let checkTarget = function (i=0) {
+			if (extraRightCondition && extraLeftCondition && extraUpCondition && extraDownCondition) {
 				if (checkConditions(right)) {
-					playerBoard.receiveAttack(player.dock, right.slice(7, 10));
-					cpu.plays.push(right.slice(7, 10));
+					attack(right);
+				} else if (checkConditions(left)) {
+					attack(left);
+				} else if (checkConditions(up)) {
+					attack(up);
+				} else if (checkConditions(down)) {
+					attack(down);
 				} else {
-					if (left.slice(8, 10) != 0) {
-						if (checkConditions(left)) {
-							playerBoard.receiveAttack(player.dock, left.slice(7, 10));
-							cpu.plays.push(left.slice(7, 10));
-						} else {
-							if (up.slice(7, 16) != "undefined") {
-								if (checkConditions(up)) {
-									playerBoard.receiveAttack(player.dock, up.slice(7, 10));
-									cpu.plays.push(up.slice(7, 10));
-								} else {
-									if (down.slice(7, 16) != "undefined") {
-										playerBoard.receiveAttack(player.dock, down.slice(7, 10));
-										cpu.plays.push(down.slice(7, 10));
-									} else {
-										hit.shift();
-										checkTarget(i);
-									}
-								}
-							}
-						}
+					hit.shift();
+					checkTarget(i++);
+				};
+			} else if (!extraRightCondition) {
+				if (!extraUpCondition) {
+					if (checkConditions(left)) {
+						attack(left);
+					} else if (checkConditions(down)) {
+						attack(down);
 					}
-				}
-			};
+				} else if (!extraDownCondition) {
+					if (checkConditions(left)) {
+						attack(left);
+					} else if (checkConditions(up )) {
+						attack(up);
+					}
+				} else {
+					if (checkConditions(left)) {
+						attack(left);
+					} else if (checkConditions(up)) {
+						attack(up);
+					} else if (checkConditions(down)) {
+						attack(down);
+					}
+				};
+			} else if (!extraLeftCondition) {
+				if (!extraUpCondition) {
+					if (checkConditions(right)) {
+						attack(right);
+					} else if (checkConditions(down)) {
+						attack(down);
+					}
+				} else if (!extraDownCondition) {
+					if (checkConditions(right)) {
+						attack(right);
+					} else if (checkConditions(up )) {
+						attack(up);
+					}
+				} else {
+					if (checkConditions(right)) {
+						attack(right);
+					} else if (checkConditions(up)) {
+						attack(up);
+					} else if (checkConditions(down)) {
+						attack(down);
+					}
+				};
+			} else if(!extraUpCondition) {
+				if (!extraRightCondition) {
+					if (checkConditions(left)) {
+						attack(left);
+					} else if (checkConditions(down)) {
+						attack(down);
+					}
+				} else if (!extraLeftCondition) {
+					if (checkConditions(right)) {
+						attack(right);
+					} else if (checkConditions(down)) {
+						attack(down);
+					}
+				} else {
+					if (checkConditions(right)) {
+						attack(right);
+					} else if (checkConditions(left)) {
+						attack(left);
+					} else if (checkConditions(down)) {
+						attack(down);
+					};
+				};
+			} else if (!extraDownCondition) {
+				if (!extraRightCondition) {
+					if (checkConditions(left)) {
+						attack(left);
+					} else if (checkConditions(up)) {
+						attack(up);
+					}
+				} else if (!extraLeftCondition) {
+					if (checkConditions(right)) {
+						attack(right);
+					} else if (checkConditions(up )) {
+						attack(up);
+					}
+				} else {
+					if (checkConditions(right)) {
+						attack(right);
+					} else if (checkConditions(left)) {
+						attack(left);
+					} else if (checkConditions(up)) {
+						attack(up);
+					};
+				};
+			}
 		}
-		checkTarget();
+		checkTarget(i);
 		break;
 	}
 };
