@@ -131,7 +131,7 @@ let strategicStrike = function (player, playerBoard, cpu) {
 		const extraUpCondition = up.slice(7, 16) != "undefined";
 		const extraDownCondition = down.slice(7, 16) != "undefined";
 
-		let checkTarget = function (i=0) {
+		let checkTarget = function (i) {
 			if (extraRightCondition && extraLeftCondition && extraUpCondition && extraDownCondition) {
 				if (checkConditions(right)) {
 					attack(right);
@@ -141,9 +141,6 @@ let strategicStrike = function (player, playerBoard, cpu) {
 					attack(up);
 				} else if (checkConditions(down)) {
 					attack(down);
-				} else {
-					hit.shift();
-					checkTarget(i++);
 				};
 			} else if (!extraRightCondition) {
 				if (!extraUpCondition) {
@@ -151,13 +148,13 @@ let strategicStrike = function (player, playerBoard, cpu) {
 						attack(left);
 					} else if (checkConditions(down)) {
 						attack(down);
-					}
+					};
 				} else if (!extraDownCondition) {
 					if (checkConditions(left)) {
 						attack(left);
 					} else if (checkConditions(up )) {
 						attack(up);
-					}
+					};
 				} else {
 					if (checkConditions(left)) {
 						attack(left);
@@ -165,7 +162,7 @@ let strategicStrike = function (player, playerBoard, cpu) {
 						attack(up);
 					} else if (checkConditions(down)) {
 						attack(down);
-					}
+					};
 				};
 			} else if (!extraLeftCondition) {
 				if (!extraUpCondition) {
@@ -173,13 +170,13 @@ let strategicStrike = function (player, playerBoard, cpu) {
 						attack(right);
 					} else if (checkConditions(down)) {
 						attack(down);
-					}
+					};
 				} else if (!extraDownCondition) {
 					if (checkConditions(right)) {
 						attack(right);
 					} else if (checkConditions(up )) {
 						attack(up);
-					}
+					};
 				} else {
 					if (checkConditions(right)) {
 						attack(right);
@@ -187,7 +184,7 @@ let strategicStrike = function (player, playerBoard, cpu) {
 						attack(up);
 					} else if (checkConditions(down)) {
 						attack(down);
-					}
+					};
 				};
 			} else if(!extraUpCondition) {
 				if (!extraRightCondition) {
@@ -195,13 +192,13 @@ let strategicStrike = function (player, playerBoard, cpu) {
 						attack(left);
 					} else if (checkConditions(down)) {
 						attack(down);
-					}
+					};
 				} else if (!extraLeftCondition) {
 					if (checkConditions(right)) {
 						attack(right);
 					} else if (checkConditions(down)) {
 						attack(down);
-					}
+					};
 				} else {
 					if (checkConditions(right)) {
 						attack(right);
@@ -217,13 +214,13 @@ let strategicStrike = function (player, playerBoard, cpu) {
 						attack(left);
 					} else if (checkConditions(up)) {
 						attack(up);
-					}
+					};
 				} else if (!extraLeftCondition) {
 					if (checkConditions(right)) {
 						attack(right);
 					} else if (checkConditions(up )) {
 						attack(up);
-					}
+					};
 				} else {
 					if (checkConditions(right)) {
 						attack(right);
