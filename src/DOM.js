@@ -106,11 +106,13 @@ let strategicStrike = function (player, playerBoard, cpu) {
 		};
 	});
 
-	for (let i = 0; i < hit.length; i++) {
-		const right = "player-" + hit[i].slice(7, 8) + (Math.floor(hit[i].slice(8, 10)) + 1);
-		const left = "player-" + hit[i].slice(7, 8) + (Math.floor(hit[i].slice(8, 10)) - 1);
-		const up = "player-" + columns[columns.indexOf(hit[i].slice(7, 8)) - 1] + (Math.floor(hit[i].slice(8, 10)));
-		const down = "player-" + columns[columns.indexOf(hit[i].slice(7, 8)) + 1] + (Math.floor(hit[i].slice(8, 10)));
+	let clearHit = [];
+
+	hit.forEach(hit => {
+		const right = "player-" + hit.slice(7, 8) + (Math.floor(hit.slice(8, 10)) + 1);
+		const left = "player-" + hit.slice(7, 8) + (Math.floor(hit.slice(8, 10)) - 1);
+		const up = "player-" + columns[columns.indexOf(hit.slice(7, 8)) - 1] + (Math.floor(hit.slice(8, 10)));
+		const down = "player-" + columns[columns.indexOf(hit.slice(7, 8)) + 1] + (Math.floor(hit.slice(8, 10)));
 
 		let checkConditions = function (side) {
 			let conditions = !document.getElementById(side).classList.contains("hit") &&
@@ -121,120 +123,117 @@ let strategicStrike = function (player, playerBoard, cpu) {
 			};
 		};
 
-		let attack = function(side) {
-			playerBoard.receiveAttack(player.dock, side.slice(7, 10));
-			cpu.plays.push(side.slice(7, 10));
-		};
-
 		const extraRightCondition = right.slice(8, 10) < 11;
 		const extraLeftCondition = left.slice(8, 10) != 0;
 		const extraUpCondition = up.slice(7, 16) != "undefined";
 		const extraDownCondition = down.slice(7, 16) != "undefined";
 
-		let checkTarget = function (i) {
-			if (extraRightCondition && extraLeftCondition && extraUpCondition && extraDownCondition) {
-				if (checkConditions(right)) {
-					attack(right);
-				} else if (checkConditions(left)) {
-					attack(left);
-				} else if (checkConditions(up)) {
-					attack(up);
+		if (extraRightCondition && extraLeftCondition && extraUpCondition && extraDownCondition) {
+			if (checkConditions(right)) {
+				clearHit.push(right);
+			} else if (checkConditions(left)) {
+				clearHit.push(left);
+			} else if (checkConditions(up)) {
+				clearHit.push(up);
+			} else if (checkConditions(down)) {
+				clearHit.push(down);
+			};
+		} else if (!extraRightCondition) {
+			if (!extraUpCondition) {
+				if (checkConditions(left)) {
+					clearHit.push(left);
 				} else if (checkConditions(down)) {
-					attack(down);
-				};
-			} else if (!extraRightCondition) {
-				if (!extraUpCondition) {
-					if (checkConditions(left)) {
-						attack(left);
-					} else if (checkConditions(down)) {
-						attack(down);
-					};
-				} else if (!extraDownCondition) {
-					if (checkConditions(left)) {
-						attack(left);
-					} else if (checkConditions(up )) {
-						attack(up);
-					};
-				} else {
-					if (checkConditions(left)) {
-						attack(left);
-					} else if (checkConditions(up)) {
-						attack(up);
-					} else if (checkConditions(down)) {
-						attack(down);
-					};
-				};
-			} else if (!extraLeftCondition) {
-				if (!extraUpCondition) {
-					if (checkConditions(right)) {
-						attack(right);
-					} else if (checkConditions(down)) {
-						attack(down);
-					};
-				} else if (!extraDownCondition) {
-					if (checkConditions(right)) {
-						attack(right);
-					} else if (checkConditions(up )) {
-						attack(up);
-					};
-				} else {
-					if (checkConditions(right)) {
-						attack(right);
-					} else if (checkConditions(up)) {
-						attack(up);
-					} else if (checkConditions(down)) {
-						attack(down);
-					};
-				};
-			} else if(!extraUpCondition) {
-				if (!extraRightCondition) {
-					if (checkConditions(left)) {
-						attack(left);
-					} else if (checkConditions(down)) {
-						attack(down);
-					};
-				} else if (!extraLeftCondition) {
-					if (checkConditions(right)) {
-						attack(right);
-					} else if (checkConditions(down)) {
-						attack(down);
-					};
-				} else {
-					if (checkConditions(right)) {
-						attack(right);
-					} else if (checkConditions(left)) {
-						attack(left);
-					} else if (checkConditions(down)) {
-						attack(down);
-					};
+					clearHit.push(down);
 				};
 			} else if (!extraDownCondition) {
-				if (!extraRightCondition) {
-					if (checkConditions(left)) {
-						attack(left);
-					} else if (checkConditions(up)) {
-						attack(up);
-					};
-				} else if (!extraLeftCondition) {
-					if (checkConditions(right)) {
-						attack(right);
-					} else if (checkConditions(up )) {
-						attack(up);
-					};
-				} else {
-					if (checkConditions(right)) {
-						attack(right);
-					} else if (checkConditions(left)) {
-						attack(left);
-					} else if (checkConditions(up)) {
-						attack(up);
-					};
+				if (checkConditions(left)) {
+					clearHit.push(left);
+				} else if (checkConditions(up)) {
+					clearHit.push(up);
 				};
-			}
+			} else {
+				if (checkConditions(left)) {
+					clearHit.push(left);
+				} else if (checkConditions(up)) {
+					clearHit.push(up);
+				} else if (checkConditions(down)) {
+					clearHit.push(down);
+				};
+			};
+		} else if (!extraLeftCondition) {
+			if (!extraUpCondition) {
+				if (checkConditions(right)) {
+					clearHit.push(right);
+				} else if (checkConditions(down)) {
+					clearHit.push(down);
+				};
+			} else if (!extraDownCondition) {
+				if (checkConditions(right)) {
+					clearHit.push(right);
+				} else if (checkConditions(up)) {
+					clearHit.push(up);
+				};
+			} else {
+				if (checkConditions(right)) {
+					clearHit.push(right);
+				} else if (checkConditions(up)) {
+					clearHit.push(up);
+				} else if (checkConditions(down)) {
+					clearHit.push(down);
+				};
+			};
+		} else if (!extraUpCondition) {
+			if (!extraRightCondition) {
+				if (checkConditions(left)) {
+					clearHit.push(left);
+				} else if (checkConditions(down)) {
+					clearHit.push(down);
+				};
+			} else if (!extraLeftCondition) {
+				if (checkConditions(right)) {
+					clearHit.push(right);
+				} else if (checkConditions(down)) {
+					clearHit.push(down);
+				};
+			} else {
+				if (checkConditions(right)) {
+					clearHit.push(right);
+				} else if (checkConditions(left)) {
+					clearHit.push(left);
+				} else if (checkConditions(down)) {
+					clearHit.push(down);
+				};
+			};
+		} else if (!extraDownCondition) {
+			if (!extraRightCondition) {
+				if (checkConditions(left)) {
+					clearHit.push(left);
+				} else if (checkConditions(up)) {
+					clearHit.push(up);
+				};
+			} else if (!extraLeftCondition) {
+				if (checkConditions(right)) {
+					clearHit.push(right);
+				} else if (checkConditions(up)) {
+					clearHit.push(up);
+				};
+			} else {
+				if (checkConditions(right)) {
+					clearHit.push(right);
+				} else if (checkConditions(left)) {
+					clearHit.push(left);
+				} else if (checkConditions(up)) {
+					clearHit.push(up);
+				};
+			};
 		}
-		checkTarget(i);
-		break;
-	}
+	});
+
+	let attack = function () {
+		playerBoard.receiveAttack(player.dock, clearHit[0].slice(7, 10));
+		cpu.plays.push(clearHit[0].slice(7, 10));
+	};
+	attack();
 };
 
 //marks the hits and misses on each board

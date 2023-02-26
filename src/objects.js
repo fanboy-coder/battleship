@@ -40,7 +40,6 @@ class Gameboard {
 			let secondLetter = yPos.slice(0, 1);
 
 			let result = [];
-			let board = this.board;
 
 			function letterPositions(firstLetter, firstNum) {
 				if (result.length === ship.length) return;
