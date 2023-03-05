@@ -1,21 +1,31 @@
-const { Ship, Gameboard, Player } = require("./objects");
-const { GameController } = require("./index")
+import { GameController } from "./index";
 
+//modal that starts the game
 let startWindow = function (game) {
 	let container = document.querySelector(".container");
 	let background = container.appendChild(document.createElement("div"));
 	background.setAttribute("id", "modal-bg-display");
-	let modal = background.appendChild(document.createElement("div"));
-	modal.setAttribute("class", "modal");
-	let h1 = modal.appendChild(document.createElement("h1"));
-	h1.textContent = "WELCOME TO BATTLESHIP";
-	let button = modal.appendChild(document.createElement("btn"));
-	button.textContent = "NEW GAME";
+	let slider = container.appendChild(document.createElement("div"));
+	slider.setAttribute("class", "slider");
+	slider.classList.add("slide-in");
+	let h1 = slider.appendChild(document.createElement("h1"));
+	h1.textContent = "Welcome to BATTLESHIP";
+	let button = slider.appendChild(document.createElement("btn"));
+	button.textContent = "New game";
 	button.setAttribute("class", "button");
 	button.addEventListener("click", () => {
-		game.placeShipPlayer();
-		game.placeShipCpu();
+		h1.textContent = "Place the ships on your board"
+		slider.style.cssText = "box-shadow: -3px 0px 10px 1px #aaaaaa";
+		button.remove();
 		background.remove();
+		let start = slider.appendChild(document.createElement("btn"));
+		start.textContent = "Start game";
+		start.setAttribute("class","button");
+		start.addEventListener("click",() => {
+			game.placeShipPlayer();
+			game.placeShipCpu();
+			slider.remove();
+		})
 	})
 }
 
@@ -43,7 +53,7 @@ let gameoverWindow = function (player, cpu) {
 			const game = new GameController();
 			game.placeShipPlayer();
 			game.placeShipCpu();
-			hits(game.playerBoard, game.cpuBoard);
+			clear();s
 			background.remove();
 			console.log(game);
 		})
@@ -96,6 +106,7 @@ let domBoard = function (playerBoard, cpuBoard, player, cpu) {
 	});
 };
 
+//checks for a probable hit next to a hit on the board
 let strategicStrike = function (player, playerBoard, cpu) {
 	let hit = [];
 	const columns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
@@ -262,6 +273,24 @@ let hits = function (player, playerBoard, cpu, cpuBoard) {
 	checkSunk(cpu);
 };
 
+let clear = function () {
+	let cpuCell = document.querySelectorAll(".cpu-cell");
+	let playerCell = document.querySelectorAll(".player-cell");
+
+	cpuCell.forEach(cell => {
+		cell.classList.remove("hit");
+		cell.classList.remove("miss");
+		cell.classList.remove("sunk");
+	})
+
+	playerCell.forEach(cell => {
+		cell.classList.remove("hit");
+		cell.classList.remove("miss");
+		cell.classList.remove("sunk");
+	})
+}
+
+//marks sunk ships on the board
 let checkSunk = function (current) {
 	let cpuCells = document.querySelectorAll(".cpu-cell");
 	let playerCells = document.querySelectorAll(".player-cell");
@@ -288,4 +317,4 @@ let checkSunk = function (current) {
 	}
 }
 
-module.exports = { startWindow, domBoard, hits, strategicStrike };
+export default { startWindow, domBoard, hits, strategicStrike };

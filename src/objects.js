@@ -1,4 +1,4 @@
-const { strategicStrike } = require("./DOM");
+const { strategicStrike } = require("./DOM").default;
 
 class Ship {
 	constructor(name, length) {

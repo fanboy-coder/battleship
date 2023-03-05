@@ -1,5 +1,5 @@
 const { Ship, Gameboard, Player } = require("./objects");
-const { startWindow, domBoard } = require("./DOM");
+const { startWindow, domBoard } = require("./DOM").default;
 require("./styles/style.css");
 
 class GameController {
@@ -46,9 +46,9 @@ class GameController {
 };
 
 const game = new GameController();
-console.log(game)
 startWindow(game);
 domBoard(game.playerBoard, game.cpuBoard, game.player, game.cpu);
 
 
-module.exports = { GameController };
+// module.exports = { GameController };
+export { GameController };
