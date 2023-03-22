@@ -8,26 +8,88 @@ let startWindow = function (game) {
 	let slider = container.appendChild(document.createElement("div"));
 	slider.setAttribute("class", "slider");
 	slider.classList.add("slide-in");
-	let h1 = slider.appendChild(document.createElement("h1"));
+	let header = slider.appendChild(document.createElement("div"));
+	header.setAttribute("class","header");
+	let h1 = header.appendChild(document.createElement("h1"));
 	h1.textContent = "Welcome to BATTLESHIP";
-	let button = slider.appendChild(document.createElement("btn"));
+	let footer = slider.appendChild(document.createElement("div"));
+	footer.setAttribute("class","footer");
+	let button = footer.appendChild(document.createElement("btn"));
 	button.textContent = "New game";
 	button.setAttribute("class", "button");
 	button.addEventListener("click", () => {
-		h1.textContent = "Place the ships on your board"
 		slider.style.cssText = "box-shadow: -3px 0px 10px 1px #aaaaaa";
-		button.remove();
 		background.remove();
-		let start = slider.appendChild(document.createElement("btn"));
-		start.textContent = "Start game";
-		start.setAttribute("class","button");
-		start.addEventListener("click",() => {
+		h1.textContent = "Place your ships on the board";
+		let cell = document.querySelectorAll(".player-cell");
+		cell.forEach(cell => {
+			cell.innerText = cell.id.slice(7,10);
+		})
+		let dock = document.createElement("div");
+		dock.setAttribute("class", "dock");
+		slider.insertBefore(dock,footer);
+		placeShip();
+		button.textContent = "Start game";
+		button.addEventListener("click", () => {
+			cell.forEach(cell => {
+				cell.innerText = "";
+			});
 			game.placeShipPlayer();
 			game.placeShipCpu();
 			slider.remove();
 		})
 	})
 }
+
+let placeShip = function (i = 0) {
+	let dock = document.querySelector(".dock");
+	if (dock.childNodes.length == 6) return;
+	let form = dock.appendChild(document.createElement("div"));
+	form.setAttribute("class", "form");
+	let box1 = form.appendChild(document.createElement("div"));
+	box1.setAttribute("class","box");
+	let name = box1.appendChild(document.createElement("p"));
+	name.setAttribute("class", "name");
+	switch (i) {
+		case 0:
+			name.textContent = "Cruiser (5 spaces)";
+			break;
+		case 1:
+			name.textContent = "Battleship (4 spaces)";
+			break;
+		case 2:
+			name.textContent = "Submarine 1 (3 spaces)";
+			break;
+		case 3:
+			name.textContent = "Submarine 2 (3 spaces)";
+			break;
+		case 4:
+			name.textContent = "Destroyer 1 (2 spaces)";
+			break;
+		case 5:
+			name.textContent = "Destroyer 2 (2 spaces)";
+			break;
+	}
+	let box2 = form.appendChild(document.createElement("div"));
+	box2.setAttribute("class","box");
+	let pos1 = box2.appendChild(document.createElement("input"));
+	pos1.setAttribute("class","input");
+	pos1.setAttribute("type", "text");
+	pos1.setAttribute("maxlength", "2");
+	pos1.setAttribute("size", "1");
+	pos1.setAttribute("id", "pos-" + i);
+	let to = box2.appendChild(document.createElement("p"));
+	to.textContent = " to ";
+	let pos2 = box2.appendChild(document.createElement("input"));
+	pos2.setAttribute("class","input");
+	pos2.setAttribute("type", "text");
+	pos2.setAttribute("maxlength", "2");
+	pos2.setAttribute("size", "1");
+	pos2.setAttribute("id", "pos-" + i + 1);
+	let box3 = form.appendChild(document.createElement("div"));
+	box3.setAttribute("class","box");
+	placeShip(i + 1);
+};
 
 //generates a game over modal once the game ends
 let gameoverWindow = function (player, cpu) {
@@ -53,7 +115,7 @@ let gameoverWindow = function (player, cpu) {
 			const game = new GameController();
 			game.placeShipPlayer();
 			game.placeShipCpu();
-			clear();s
+			clear(); s
 			background.remove();
 			console.log(game);
 		})

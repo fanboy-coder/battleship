@@ -16,14 +16,12 @@ class GameController {
 		this.submarine2 = new Ship("submarine 2",3);
 		this.destroyer = new Ship("destroyer",2);
 		this.destroyer2 = new Ship("destroyer 2",2);
-		this.destroyer3 = new Ship("destroyer 3",2);
 		this.cpucarrier = new Ship("carrier",5);
 		this.cpubattleship = new Ship("battleship",4);
 		this.cpusubmarine = new Ship("submarine",3);
 		this.cpusubmarine2 = new Ship("submarine 2",3);
 		this.cpudestroyer = new Ship("destroyer",2);
 		this.cpudestroyer2 = new Ship("destroyer 2",2);
-		this.cpudestroyer3 = new Ship("destroyer 3",2);
 		this.placeShipPlayer = function () {
 			this.playerBoard.placeShip(this.player.dock, this.carrier, "F1", "F5");
 			this.playerBoard.placeShip(this.player.dock, this.battleship, "J1", "J4");
@@ -31,7 +29,6 @@ class GameController {
 			this.playerBoard.placeShip(this.player.dock, this.submarine2, "H1", "H3");
 			this.playerBoard.placeShip(this.player.dock, this.destroyer, "C9", "C10");
 			this.playerBoard.placeShip(this.player.dock, this.destroyer2, "E3", "E4");
-			this.playerBoard.placeShip(this.player.dock, this.destroyer3, "I6", "J6");
 		};
 		this.placeShipCpu = function () {
 			this.cpuBoard.randomPlaceShip(this.cpu,this.cpucarrier);
@@ -40,7 +37,6 @@ class GameController {
 			this.cpuBoard.randomPlaceShip(this.cpu,this.cpusubmarine2);
 			this.cpuBoard.randomPlaceShip(this.cpu,this.cpudestroyer);
 			this.cpuBoard.randomPlaceShip(this.cpu,this.cpudestroyer2);
-			this.cpuBoard.randomPlaceShip(this.cpu,this.cpudestroyer3);
 		};
 	}
 };
