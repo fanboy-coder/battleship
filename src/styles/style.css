@@ -60,7 +60,7 @@ h3,
 	border: 1px solid white;
 }
 
-.hit, .miss,.sunk {
+.hit, .miss,.sunk, .validation {
 	background-repeat: no-repeat;
 }
 

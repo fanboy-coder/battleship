@@ -1,4 +1,5 @@
 import { GameController } from "./index";
+const { Ship, Gameboard, Player} = require("./objects");
 
 //modal that starts the game
 let startWindow = function (game) {
@@ -29,6 +30,28 @@ let startWindow = function (game) {
 		dock.setAttribute("class", "dock");
 		slider.insertBefore(dock,footer);
 		placeShip();
+		let ships = document.querySelectorAll(".coordinates");
+		ships.forEach((ship) => {
+			ship.addEventListener("input", () => {
+				if (ship.children[0].value.length == 2 && ship.children[2].value.length == 2) {
+					const lettersRegex = /^[a-zA-Z]+$/;
+					const numbersRegex = /^[0-9]+$/;
+					const nextElement = ship.nextSibling;
+					const vessel = ship.parentElement.classList.item(1);
+					if (lettersRegex.test(ship.children[0].value[0]) && lettersRegex.test(ship.children[2].value[0])) {
+						if(numbersRegex.test(ship.children[0].value[1]) && numbersRegex.test(ship.children[2].value[1])) {
+							game.playerBoard.placeShip(game.player.dock,vessel,ship.children[0].value, ship.children[2].value,nextElement);
+						} else {
+							let validation = "invalid";
+							validate(nextElement,validation);
+						};
+					} else {
+						let validation = "invalid";
+						validate(nextElement,validation);
+					};
+				}
+			})
+		})
 		button.textContent = "Start game";
 		button.addEventListener("click", () => {
 			cell.forEach(cell => {
@@ -41,6 +64,22 @@ let startWindow = function (game) {
 	})
 }
 
+let validate = function (element, validation) {
+	let p = element.appendChild(document.createElement("p"));
+	if (validation == "invalid") {
+		element.classList.add("wrong");
+		p.textContent = "Coordinates aren't valid"
+	} else if (validation == "position") {
+		element.classList.add("wrong");
+		p.textContent = "Invalid position"
+	} else if (validation == "size") {
+		element.classList.add("wrong");
+		p.textContent =	"The spaces don't match the ship's size."
+	} else if (validation == "valid") {
+		element.classList.add("right");
+	}
+};
+
 let placeShip = function (i = 0) {
 	let dock = document.querySelector(".dock");
 	if (dock.childNodes.length == 6) return;
@@ -52,26 +91,33 @@ let placeShip = function (i = 0) {
 	name.setAttribute("class", "name");
 	switch (i) {
 		case 0:
-			name.textContent = "Cruiser (5 spaces)";
+			name.textContent = "Carrier (5 spaces)";
+			form.classList.add("carrier");
 			break;
 		case 1:
 			name.textContent = "Battleship (4 spaces)";
+			form.classList.add("battleship");
 			break;
 		case 2:
 			name.textContent = "Submarine 1 (3 spaces)";
+			form.classList.add("submarine");
 			break;
 		case 3:
 			name.textContent = "Submarine 2 (3 spaces)";
+			form.classList.add("submarine2");
 			break;
 		case 4:
 			name.textContent = "Destroyer 1 (2 spaces)";
+			form.classList.add("destroyer");
 			break;
 		case 5:
 			name.textContent = "Destroyer 2 (2 spaces)";
+			form.classList.add("destroyer2");
 			break;
-	}
+	};
 	let box2 = form.appendChild(document.createElement("div"));
 	box2.setAttribute("class","box");
+	box2.classList.add("coordinates");
 	let pos1 = box2.appendChild(document.createElement("input"));
 	pos1.setAttribute("class","input");
 	pos1.setAttribute("type", "text");
@@ -88,6 +134,7 @@ let placeShip = function (i = 0) {
 	pos2.setAttribute("id", "pos-" + i + 1);
 	let box3 = form.appendChild(document.createElement("div"));
 	box3.setAttribute("class","box");
+	box3.setAttribute("class","validation");
 	placeShip(i + 1);
 };
 
@@ -379,4 +426,4 @@ let checkSunk = function (current) {
 	}
 }
 
-export default { startWindow, domBoard, hits, strategicStrike };
+export default { startWindow, domBoard, validate, hits, strategicStrike };

@@ -1,4 +1,4 @@
-const { strategicStrike } = require("./DOM").default;
+const { validate, strategicStrike } = require("./DOM").default;
 
 class Ship {
 	constructor(name, length) {
@@ -33,7 +33,7 @@ class Gameboard {
 			});
 		};
 
-		this.placeShip = function (dock, ship, xPos, yPos) {
+		this.placeShip = function (dock, ship, xPos, yPos, nextElement) {
 			let firstNum = xPos.slice(1, 3);
 			let secondNum = yPos.slice(1, 3);
 			let firstLetter = xPos.slice(0, 1);
@@ -60,21 +60,25 @@ class Gameboard {
 						letterPositions(firstLetter, Number(firstNum));
 						ship.position = result;
 						dock.push(ship);
+						const validation = "valid";
+						validate(nextElement,validation);
 					} else if (firstNum === secondNum) {
 						const letter = columns.indexOf(firstLetter);
 						result.length = 0;
 						numberPositions(letter, firstNum);
 						ship.position = result;
 						dock.push(ship);
+						const validation = "valid";
+						validate(nextElement,validation);
 					} else {
-						console.log("Invalid position.");
+						const validation = "position";
+						validate(nextElement,validation);
 					}
 				} else {
-					console.log("The spaces you selected do not match your ship's size.")
+					const validation = "size";
+					validate(nextElement,validation);
 				};
-			} else {
-				console.log("That ship was already placed on the board.");
-			}
+			};
 		};
 
 		this.randomPlaceShip = function (cpu, ship) {
