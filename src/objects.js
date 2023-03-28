@@ -61,7 +61,7 @@ class Gameboard {
 						ship.position = result;
 						dock.push(ship);
 						const validation = "valid";
-						validate(nextElement,validation);
+						validate(nextElement,validation, dock);
 					} else if (firstNum === secondNum) {
 						const letter = columns.indexOf(firstLetter);
 						result.length = 0;
@@ -69,7 +69,7 @@ class Gameboard {
 						ship.position = result;
 						dock.push(ship);
 						const validation = "valid";
-						validate(nextElement,validation);
+						validate(nextElement,validation, dock);
 					} else {
 						const validation = "position";
 						validate(nextElement,validation);

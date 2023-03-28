@@ -1,5 +1,5 @@
 import { GameController } from "./index";
-const { Ship, Gameboard, Player} = require("./objects");
+const { Ship, Gameboard, Player } = require("./objects");
 
 //modal that starts the game
 let startWindow = function (game) {
@@ -10,11 +10,11 @@ let startWindow = function (game) {
 	slider.setAttribute("class", "slider");
 	slider.classList.add("slide-in");
 	let header = slider.appendChild(document.createElement("div"));
-	header.setAttribute("class","header");
+	header.setAttribute("class", "header");
 	let h1 = header.appendChild(document.createElement("h1"));
 	h1.textContent = "Welcome to BATTLESHIP";
 	let footer = slider.appendChild(document.createElement("div"));
-	footer.setAttribute("class","footer");
+	footer.setAttribute("class", "footer");
 	let button = footer.appendChild(document.createElement("btn"));
 	button.textContent = "New game";
 	button.setAttribute("class", "button");
@@ -24,11 +24,11 @@ let startWindow = function (game) {
 		h1.textContent = "Place your ships on the board";
 		let cell = document.querySelectorAll(".player-cell");
 		cell.forEach(cell => {
-			cell.innerText = cell.id.slice(7,10);
+			cell.innerText = cell.id.slice(7, 10);
 		})
 		let dock = document.createElement("div");
 		dock.setAttribute("class", "dock");
-		slider.insertBefore(dock,footer);
+		slider.insertBefore(dock, footer);
 		placeShip();
 		let ships = document.querySelectorAll(".coordinates");
 		ships.forEach((ship) => {
@@ -37,17 +37,17 @@ let startWindow = function (game) {
 					const lettersRegex = /^[a-zA-Z]+$/;
 					const numbersRegex = /^[0-9]+$/;
 					const nextElement = ship.nextSibling;
-					const vessel = ship.parentElement.classList.item(1);
+					const vessel = ship.parentElement.id;
 					if (lettersRegex.test(ship.children[0].value[0]) && lettersRegex.test(ship.children[2].value[0])) {
-						if(numbersRegex.test(ship.children[0].value[1]) && numbersRegex.test(ship.children[2].value[1])) {
-							game.playerBoard.placeShip(game.player.dock,vessel,ship.children[0].value, ship.children[2].value,nextElement);
+						if (numbersRegex.test(ship.children[0].value[1]) && numbersRegex.test(ship.children[2].value[1])) {
+							game.playerBoard.placeShip(game.player.dock, game[vessel], ship.children[0].value, ship.children[2].value, nextElement);
 						} else {
 							let validation = "invalid";
-							validate(nextElement,validation);
+							validate(nextElement, validation);
 						};
 					} else {
 						let validation = "invalid";
-						validate(nextElement,validation);
+						validate(nextElement, validation);
 					};
 				}
 			})
@@ -64,7 +64,7 @@ let startWindow = function (game) {
 	})
 }
 
-let validate = function (element, validation) {
+let validate = function (element, validation, dock) {
 	let p = element.appendChild(document.createElement("p"));
 	if (validation == "invalid") {
 		element.classList.add("wrong");
@@ -74,9 +74,17 @@ let validate = function (element, validation) {
 		p.textContent = "Invalid position"
 	} else if (validation == "size") {
 		element.classList.add("wrong");
-		p.textContent =	"The spaces don't match the ship's size."
+		p.textContent = "The spaces don't match the ship's size."
 	} else if (validation == "valid") {
 		element.classList.add("right");
+		let cells = document.querySelectorAll(".player-cell");
+		cells.forEach(cell => {
+			dock.forEach(element => {
+				if (element.position.includes(cell.id.slice(7, 10))) {
+					cell.classList.add("class", "ship");
+				}
+			})
+		})
 	}
 };
 
@@ -86,40 +94,40 @@ let placeShip = function (i = 0) {
 	let form = dock.appendChild(document.createElement("div"));
 	form.setAttribute("class", "form");
 	let box1 = form.appendChild(document.createElement("div"));
-	box1.setAttribute("class","box");
+	box1.setAttribute("class", "box");
 	let name = box1.appendChild(document.createElement("p"));
 	name.setAttribute("class", "name");
 	switch (i) {
 		case 0:
 			name.textContent = "Carrier (5 spaces)";
-			form.classList.add("carrier");
+			form.setAttribute("id", "carrier");
 			break;
 		case 1:
 			name.textContent = "Battleship (4 spaces)";
-			form.classList.add("battleship");
+			form.setAttribute("id", "battleship");
 			break;
 		case 2:
 			name.textContent = "Submarine 1 (3 spaces)";
-			form.classList.add("submarine");
+			form.setAttribute("id", "submarine");
 			break;
 		case 3:
 			name.textContent = "Submarine 2 (3 spaces)";
-			form.classList.add("submarine2");
+			form.setAttribute("id", "submarine2");
 			break;
 		case 4:
 			name.textContent = "Destroyer 1 (2 spaces)";
-			form.classList.add("destroyer");
+			form.setAttribute("id", "destroyer");
 			break;
 		case 5:
 			name.textContent = "Destroyer 2 (2 spaces)";
-			form.classList.add("destroyer2");
+			form.setAttribute("id", "destroyer2");
 			break;
 	};
 	let box2 = form.appendChild(document.createElement("div"));
-	box2.setAttribute("class","box");
+	box2.setAttribute("class", "box");
 	box2.classList.add("coordinates");
 	let pos1 = box2.appendChild(document.createElement("input"));
-	pos1.setAttribute("class","input");
+	pos1.setAttribute("class", "input");
 	pos1.setAttribute("type", "text");
 	pos1.setAttribute("maxlength", "2");
 	pos1.setAttribute("size", "1");
@@ -127,14 +135,14 @@ let placeShip = function (i = 0) {
 	let to = box2.appendChild(document.createElement("p"));
 	to.textContent = " to ";
 	let pos2 = box2.appendChild(document.createElement("input"));
-	pos2.setAttribute("class","input");
+	pos2.setAttribute("class", "input");
 	pos2.setAttribute("type", "text");
 	pos2.setAttribute("maxlength", "2");
 	pos2.setAttribute("size", "1");
 	pos2.setAttribute("id", "pos-" + i + 1);
 	let box3 = form.appendChild(document.createElement("div"));
-	box3.setAttribute("class","box");
-	box3.setAttribute("class","validation");
+	box3.setAttribute("class", "box");
+	box3.setAttribute("class", "validation");
 	placeShip(i + 1);
 };
 
