@@ -29,18 +29,20 @@ let startWindow = function (game) {
 		let dock = document.createElement("div");
 		dock.setAttribute("class", "dock");
 		slider.insertBefore(dock, footer);
-		placeShip();
+		addShip();
 		let ships = document.querySelectorAll(".coordinates");
 		ships.forEach((ship) => {
-			ship.addEventListener("input", () => {
-				if (ship.children[0].value.length == 2 && ship.children[2].value.length == 2) {
+			let field1 = ship.children[0];
+			let field2 = ship.children[2];
+			ship.addEventListener("change", () => {
+				if ((field1.value.length == 2 || field1.value.length == 3) && (field2.value.length == 2 || field2.value.length == 3)) {
 					const lettersRegex = /^[a-zA-Z]+$/;
 					const numbersRegex = /^[0-9]+$/;
 					const nextElement = ship.nextSibling;
 					const vessel = ship.parentElement.id;
-					if (lettersRegex.test(ship.children[0].value[0]) && lettersRegex.test(ship.children[2].value[0])) {
-						if (numbersRegex.test(ship.children[0].value[1]) && numbersRegex.test(ship.children[2].value[1])) {
-							game.playerBoard.placeShip(game.player.dock, game[vessel], ship.children[0].value, ship.children[2].value, nextElement);
+					if (lettersRegex.test(field1.value[0]) && lettersRegex.test(field2.value[0])) {
+						if (numbersRegex.test(field1.value[1]) && numbersRegex.test(field2.value[1])) {
+							game.playerBoard.placeShip(game.player.dock, game[vessel], field1.value, field2.value, nextElement);
 						} else {
 							let validation = "invalid";
 							validate(nextElement, validation);
@@ -64,6 +66,7 @@ let startWindow = function (game) {
 	})
 }
 
+//validates if a ship can be placed on the board or not
 let validate = function (element, validation, dock) {
 	let p = element.appendChild(document.createElement("p"));
 	if (validation == "invalid") {
@@ -88,7 +91,8 @@ let validate = function (element, validation, dock) {
 	}
 };
 
-let placeShip = function (i = 0) {
+//algorithm that creates a form entry for each ship
+let addShip = function (i = 0) {
 	let dock = document.querySelector(".dock");
 	if (dock.childNodes.length == 6) return;
 	let form = dock.appendChild(document.createElement("div"));
@@ -129,7 +133,7 @@ let placeShip = function (i = 0) {
 	let pos1 = box2.appendChild(document.createElement("input"));
 	pos1.setAttribute("class", "input");
 	pos1.setAttribute("type", "text");
-	pos1.setAttribute("maxlength", "2");
+	pos1.setAttribute("maxlength", "3");
 	pos1.setAttribute("size", "1");
 	pos1.setAttribute("id", "pos-" + i);
 	let to = box2.appendChild(document.createElement("p"));
@@ -137,13 +141,13 @@ let placeShip = function (i = 0) {
 	let pos2 = box2.appendChild(document.createElement("input"));
 	pos2.setAttribute("class", "input");
 	pos2.setAttribute("type", "text");
-	pos2.setAttribute("maxlength", "2");
+	pos2.setAttribute("maxlength", "3");
 	pos2.setAttribute("size", "1");
 	pos2.setAttribute("id", "pos-" + i + 1);
 	let box3 = form.appendChild(document.createElement("div"));
 	box3.setAttribute("class", "box");
 	box3.setAttribute("class", "validation");
-	placeShip(i + 1);
+	addShip(i + 1);
 };
 
 //generates a game over modal once the game ends

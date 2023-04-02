@@ -36,8 +36,8 @@ class Gameboard {
 		this.placeShip = function (dock, ship, xPos, yPos, nextElement) {
 			let firstNum = xPos.slice(1, 3);
 			let secondNum = yPos.slice(1, 3);
-			let firstLetter = xPos.slice(0, 1);
-			let secondLetter = yPos.slice(0, 1);
+			let firstLetter = xPos.toUpperCase().slice(0, 1);
+			let secondLetter = yPos.toUpperCase().slice(0, 1);
 
 			let result = [];
 
@@ -53,23 +53,55 @@ class Gameboard {
 				numberPositions(letter + 1, firstNum);
 			};
 
+			function checkMatch(dock,ship) {
+				const isMatch = (dock, result) => {
+					for (let i = 0; i < dock.length; i++) {
+					const boat = dock[i];
+					  for (let j = 0; j < result.length; j++) {
+						const value = result[j];
+						if (boat.position.includes(value)) {
+						  return true;
+						}
+					  }
+					}
+					return false;
+				  };
+
+				if (!isMatch(dock,result)) {
+					dock.push(ship);
+					const validation = "valid";
+					validate(nextElement,validation, dock);
+				} else {
+					const validation = "position";
+					validate(nextElement,validation);
+				}
+			}
+
 			if (!dock.includes(ship.name)) {
 				if ((firstNum - secondNum) === -ship.length + 1 || ((columns.indexOf(secondLetter) + 1) - columns.indexOf(firstLetter)) === ship.length) {
 					if (firstLetter === secondLetter) {
 						result.length = 0;
 						letterPositions(firstLetter, Number(firstNum));
 						ship.position = result;
-						dock.push(ship);
-						const validation = "valid";
-						validate(nextElement,validation, dock);
+						if (dock.length > 0) {
+							checkMatch(dock,ship);
+						} else {
+							dock.push(ship);
+							const validation = "valid";
+							validate(nextElement,validation, dock);
+						}
 					} else if (firstNum === secondNum) {
 						const letter = columns.indexOf(firstLetter);
 						result.length = 0;
 						numberPositions(letter, firstNum);
 						ship.position = result;
-						dock.push(ship);
-						const validation = "valid";
-						validate(nextElement,validation, dock);
+						if (dock.length > 0) {
+								checkMatch(dock,ship);	
+						} else {
+							dock.push(ship);
+							const validation = "valid";
+							validate(nextElement,validation, dock);
+						}
 					} else {
 						const validation = "position";
 						validate(nextElement,validation);
