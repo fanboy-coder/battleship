@@ -68,19 +68,26 @@ let startWindow = function (game) {
 
 //validates if a ship can be placed on the board or not
 let validate = function (element, validation, dock) {
-	let p = element.appendChild(document.createElement("p"));
+	const validity = element.appendChild(document.createElement("span"));
+	const p = element.appendChild(document.createElement("p"));
+	const target = element.previousElementSibling;
+	const inputElements = target.querySelectorAll("input");
+
 	if (validation == "invalid") {
-		element.classList.add("wrong");
-		p.textContent = "Coordinates aren't valid"
+		validity.classList.add("wrong");
+		p.textContent = "Coordinates aren't valid";
 	} else if (validation == "position") {
-		element.classList.add("wrong");
+		validity.classList.add("wrong");
 		p.textContent = "Invalid position"
 	} else if (validation == "size") {
-		element.classList.add("wrong");
+		validity.classList.add("wrong");
 		p.textContent = "The spaces don't match the ship's size."
 	} else if (validation == "valid") {
-		element.classList.add("right");
+		validity.classList.add("right");
 		let cells = document.querySelectorAll(".player-cell");
+		inputElements.forEach(input => {
+			input.disabled = true;
+		});
 		cells.forEach(cell => {
 			dock.forEach(element => {
 				if (element.position.includes(cell.id.slice(7, 10))) {
