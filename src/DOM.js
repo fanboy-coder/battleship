@@ -59,7 +59,6 @@ let startWindow = function (game) {
 			cell.forEach(cell => {
 				cell.innerText = "";
 			});
-			game.placeShipPlayer();
 			game.placeShipCpu();
 			slider.remove();
 		})
@@ -68,8 +67,14 @@ let startWindow = function (game) {
 
 //validates if a ship can be placed on the board or not
 let validate = function (element, validation, dock) {
-	const validity = element.appendChild(document.createElement("span"));
-	const p = element.appendChild(document.createElement("p"));
+
+	if (element.querySelector("span") === null) {
+		element.appendChild(document.createElement("span"));
+		element.appendChild(document.createElement("p"));
+	}
+
+	const validity = element.querySelector("span");
+	const p = element.querySelector("p");
 	const target = element.previousElementSibling;
 	const inputElements = target.querySelectorAll("input");
 
@@ -84,10 +89,12 @@ let validate = function (element, validation, dock) {
 		p.textContent = "The spaces don't match the ship's size."
 	} else if (validation == "valid") {
 		validity.classList.add("right");
-		let cells = document.querySelectorAll(".player-cell");
+		validity.classList.remove("wrong");
+		p.textContent = "";
 		inputElements.forEach(input => {
 			input.disabled = true;
 		});
+		let cells = document.querySelectorAll(".player-cell");
 		cells.forEach(cell => {
 			dock.forEach(element => {
 				if (element.position.includes(cell.id.slice(7, 10))) {
@@ -179,7 +186,6 @@ let gameoverWindow = function (player, cpu) {
 		button.setAttribute("class", "button");
 		button.addEventListener("click", () => {
 			const game = new GameController();
-			game.placeShipPlayer();
 			game.placeShipCpu();
 			clear(); s
 			background.remove();
