@@ -22,14 +22,6 @@ class GameController {
 		this.cpusubmarine2 = new Ship("submarine 2",3);
 		this.cpudestroyer = new Ship("destroyer",2);
 		this.cpudestroyer2 = new Ship("destroyer 2",2);
-		// this.placeShipPlayer = function () {
-		// 	this.playerBoard.placeShip(this.player.dock, this.carrier, "F1", "F5");
-		// 	this.playerBoard.placeShip(this.player.dock, this.battleship, "J1", "J4");
-		// 	this.playerBoard.placeShip(this.player.dock, this.submarine, "B2", "D2");
-		// 	this.playerBoard.placeShip(this.player.dock, this.submarine2, "H1", "H3");
-		// 	this.playerBoard.placeShip(this.player.dock, this.destroyer, "C9", "C10");
-		// 	this.playerBoard.placeShip(this.player.dock, this.destroyer2, "E3", "E4");
-		// };
 		this.placeShipCpu = function () {
 			this.cpuBoard.randomPlaceShip(this.cpu,this.cpucarrier);
 			this.cpuBoard.randomPlaceShip(this.cpu,this.cpubattleship);
