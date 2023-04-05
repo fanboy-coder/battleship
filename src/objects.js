@@ -69,13 +69,8 @@ class Gameboard {
 
 				if (!isMatch(dock,result)) {
 					dock.push(ship);
-					const validation = "valid";
-					validate(nextElement,validation, dock);
-				} else {
-					const validation = "position";
-					validate(nextElement,validation);
-				}
-			}
+				};
+			};
 
 			if (!dock.includes(ship.name)) {
 				if ((firstNum - secondNum) === -ship.length + 1 || ((columns.indexOf(secondLetter) + 1) - columns.indexOf(firstLetter)) === ship.length) {
@@ -87,8 +82,6 @@ class Gameboard {
 							checkMatch(dock,ship);
 						} else {
 							dock.push(ship);
-							const validation = "valid";
-							validate(nextElement,validation, dock);
 						}
 					} else if (firstNum === secondNum) {
 						const letter = columns.indexOf(firstLetter);
@@ -99,16 +92,8 @@ class Gameboard {
 								checkMatch(dock,ship);	
 						} else {
 							dock.push(ship);
-							const validation = "valid";
-							validate(nextElement,validation, dock);
 						}
-					} else {
-						const validation = "position";
-						validate(nextElement,validation);
-					}
-				} else {
-					const validation = "size";
-					validate(nextElement,validation);
+					};
 				};
 			};
 		};

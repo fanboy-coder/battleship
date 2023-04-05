@@ -40,9 +40,17 @@ let startWindow = function (game) {
 					const numbersRegex = /^[0-9]+$/;
 					const nextElement = ship.nextSibling;
 					const vessel = ship.parentElement.id;
+					const currentDockSize = game.player.dock.length;
 					if (lettersRegex.test(field1.value[0]) && lettersRegex.test(field2.value[0])) {
 						if (numbersRegex.test(field1.value[1]) && numbersRegex.test(field2.value[1])) {
 							game.playerBoard.placeShip(game.player.dock, game[vessel], field1.value, field2.value, nextElement);
+							if (game.player.dock.length > currentDockSize) {
+								const validation = "valid";
+								validate(nextElement,validation, game.player.dock);
+							} else {
+								const validation = "size";
+								validate(nextElement,validation);
+							};
 						} else {
 							let validation = "invalid";
 							validate(nextElement, validation);
