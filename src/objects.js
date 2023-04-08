@@ -1,4 +1,4 @@
-const { validate, strategicStrike } = require("./DOM").default;
+const { strategicStrike } = require("./DOM").default;
 
 class Ship {
 	constructor(name, length) {

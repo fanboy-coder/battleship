@@ -1,5 +1,4 @@
 import { GameController } from "./index";
-const { Ship, Gameboard, Player } = require("./objects");
 
 //modal that starts the game
 let startWindow = function (game) {
@@ -18,6 +17,7 @@ let startWindow = function (game) {
 	let button = footer.appendChild(document.createElement("btn"));
 	button.textContent = "New game";
 	button.setAttribute("class", "button");
+	button.setAttribute("id","new-game");
 	button.addEventListener("click", () => {
 		slider.style.cssText = "box-shadow: -3px 0px 10px 1px #aaaaaa";
 		background.remove();
@@ -173,7 +173,7 @@ let addShip = function (i = 0) {
 };
 
 //generates a game over modal once the game ends
-let gameoverWindow = function (player, cpu) {
+let gameoverWindow = function (player, cpu,game) {
 	let winner = "";
 	if (player.lost == true) {
 		winner = "CPU";
@@ -192,18 +192,28 @@ let gameoverWindow = function (player, cpu) {
 		let button = modal.appendChild(document.createElement("btn"));
 		button.textContent = "NEW GAME";
 		button.setAttribute("class", "button");
+		game.deleteObjects();
 		button.addEventListener("click", () => {
-			const game = new GameController();
+			game.createObjects();
 			game.placeShipCpu();
-			clear(); s
+			clear();
+			modal.remove();
 			background.remove();
+			startWindow(game);
+			autoClick();
 			console.log(game);
 		})
 	}
 };
 
+//auto-clicks the new game button after restarting the game
+let autoClick = function() {
+	let button = document.getElementById("new-game");
+	button.click();
+}
+
 //generates both player's boards
-let domBoard = function (playerBoard, cpuBoard, player, cpu) {
+let domBoard = function (playerBoard, cpuBoard, player, cpu,game) {
 	let container = document.querySelector(".container");
 	let playarea = container.appendChild(document.createElement("div"));
 	playarea.setAttribute("id", "play-area");
@@ -242,7 +252,7 @@ let domBoard = function (playerBoard, cpuBoard, player, cpu) {
 			hits(player, playerBoard, cpu, cpuBoard);
 			cpu.gameOver();
 			player.gameOver();
-			gameoverWindow(player, cpu);
+			game.checkGameOver();
 			cell.removeEventListener("click", play);
 		}
 	});
@@ -415,6 +425,7 @@ let hits = function (player, playerBoard, cpu, cpuBoard) {
 	checkSunk(cpu);
 };
 
+//clears all graphic elements on the board
 let clear = function () {
 	let cpuCell = document.querySelectorAll(".cpu-cell");
 	let playerCell = document.querySelectorAll(".player-cell");
@@ -429,6 +440,7 @@ let clear = function () {
 		cell.classList.remove("hit");
 		cell.classList.remove("miss");
 		cell.classList.remove("sunk");
+		cell.classList.remove("ship");
 	})
 }
 
@@ -459,4 +471,4 @@ let checkSunk = function (current) {
 	}
 }
 
-export default { startWindow, domBoard, validate, hits, strategicStrike };
+export default { startWindow, domBoard, validate, hits, strategicStrike, gameoverWindow };

@@ -57,7 +57,7 @@ h3,
 }
 
 .ship {
-	background-color: chartreuse;
+	background-color: rgb(193, 225, 193);
 }
 
 .player-cell, .cpu-cell, .hit, .miss {
