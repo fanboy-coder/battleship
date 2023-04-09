@@ -53,21 +53,21 @@ class Gameboard {
 				numberPositions(letter + 1, firstNum);
 			};
 
-			function checkMatch(dock,ship) {
+			function checkMatch(dock, ship) {
 				const isMatch = (dock, result) => {
 					for (let i = 0; i < dock.length; i++) {
-					const boat = dock[i];
-					  for (let j = 0; j < result.length; j++) {
-						const value = result[j];
-						if (boat.position.includes(value)) {
-						  return true;
+						const boat = dock[i];
+						for (let j = 0; j < result.length; j++) {
+							const value = result[j];
+							if (boat.position.includes(value)) {
+								return true;
+							}
 						}
-					  }
 					}
 					return false;
-				  };
+				};
 
-				if (!isMatch(dock,result)) {
+				if (!isMatch(dock, result)) {
 					dock.push(ship);
 				};
 			};
@@ -79,7 +79,7 @@ class Gameboard {
 						letterPositions(firstLetter, Number(firstNum));
 						ship.position = result;
 						if (dock.length > 0) {
-							checkMatch(dock,ship);
+							checkMatch(dock, ship);
 						} else {
 							dock.push(ship);
 						}
@@ -89,7 +89,7 @@ class Gameboard {
 						numberPositions(letter, firstNum);
 						ship.position = result;
 						if (dock.length > 0) {
-								checkMatch(dock,ship);	
+							checkMatch(dock, ship);
 						} else {
 							dock.push(ship);
 						}
@@ -125,10 +125,10 @@ class Gameboard {
 		this.receiveAttack = function (dock, coordinates) {
 			for (let i = 0; i < dock.length; i++) {
 				if (dock[i].position.includes(coordinates)) {
-						safe = [];
-						dock[i].hit();
-						dock[i].isSunk();
-						this.hits.push(coordinates);
+					safe = [];
+					dock[i].hit();
+					dock[i].isSunk();
+					this.hits.push(coordinates);
 				}
 			}
 			if (this.hits.slice(-1) != coordinates) {
@@ -145,10 +145,10 @@ class Player {
 			this.plays = [],
 			this.lost = false,
 
-			this.randomPlay = function (player, playerBoard,cpu) {
+			this.randomPlay = function (player, playerBoard, cpu) {
 
-				let checkForTarget = function(player) {
-					for(let i =0; i<player.dock.length;i++) {
+				let checkForTarget = function (player) {
+					for (let i = 0; i < player.dock.length; i++) {
 						if (player.dock[i].hits > 0 && player.dock[i].sunk == false) {
 							return true;
 						};
@@ -156,7 +156,7 @@ class Player {
 				}
 
 				if (checkForTarget(player)) {
-					strategicStrike(player,playerBoard,cpu);
+					strategicStrike(player, playerBoard, cpu);
 				} else {
 					let play = playerBoard.board[Math.floor(Math.random() * playerBoard.board.length)];
 					if (!this.plays.includes(play)) {

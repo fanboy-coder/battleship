@@ -1,4 +1,4 @@
-import { GameController } from "./index";
+import { resetGame } from "./index";
 
 //modal that starts the game
 let startWindow = function (game) {
@@ -192,16 +192,15 @@ let gameoverWindow = function (player, cpu,game) {
 		let button = modal.appendChild(document.createElement("btn"));
 		button.textContent = "NEW GAME";
 		button.setAttribute("class", "button");
-		game.deleteObjects();
 		button.addEventListener("click", () => {
+			resetGame();
 			game.createObjects();
-			game.placeShipCpu();
+			domBoard(game.playerBoard, game.cpuBoard, game.player, game.cpu,game);
 			clear();
 			modal.remove();
 			background.remove();
 			startWindow(game);
 			autoClick();
-			console.log(game);
 		})
 	}
 };
