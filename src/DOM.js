@@ -1,4 +1,4 @@
-import { resetGame } from "./index";
+// import { resetGame } from "./index";
 
 //modal that starts the game
 let startWindow = function (game) {
@@ -193,9 +193,12 @@ let gameoverWindow = function (player, cpu,game) {
 		button.textContent = "NEW GAME";
 		button.setAttribute("class", "button");
 		button.addEventListener("click", () => {
-			resetGame();
-			game.createObjects();
-			domBoard(game.playerBoard, game.cpuBoard, game.player, game.cpu,game);
+			game.player.dock = [];
+			game.cpu.dock = [];
+			game.emptyObjects();
+			// resetGame();
+			// game.createObjects();
+			// domBoard(game.playerBoard, game.cpuBoard, game.player, game.cpu,game);
 			clear();
 			modal.remove();
 			background.remove();
