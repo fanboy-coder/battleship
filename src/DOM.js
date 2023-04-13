@@ -1,5 +1,3 @@
-// import { resetGame } from "./index";
-
 //modal that starts the game
 let startWindow = function (game) {
 	let container = document.querySelector(".container");
@@ -195,9 +193,9 @@ let gameoverWindow = function (player, cpu,game) {
 		button.addEventListener("click", () => {
 			game.emptyObjects();
 			game.createShips();
-			// resetGame();
-			// game.createObjects();
-			// domBoard(game.playerBoard, game.cpuBoard, game.player, game.cpu,game);
+			let playarea = document.getElementById("play-area");
+			playarea.remove();
+			domBoard(game.playerBoard, game.cpuBoard, game.player, game.cpu,game);
 			clear();
 			modal.remove();
 			background.remove();

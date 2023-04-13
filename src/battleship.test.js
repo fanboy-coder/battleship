@@ -1,5 +1,4 @@
 const {Ship, Gameboard, Player} = require("./objects");
-const { GameController } = require("./index");
 
 //Creates a Carrier ship
 test("Creates a Carrier ship", () => {
