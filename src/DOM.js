@@ -68,7 +68,7 @@ let startWindow = function (game) {
 			game.placeShipCpu();
 			slider.remove();
 		})
-	})
+	});
 }
 
 //validates if a ship can be placed on the board or not
